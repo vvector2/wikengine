@@ -3,22 +3,23 @@ cmake_minimum_required (VERSION 3.1)
 project (Boilerplate)
 
 add_executable(main
- ${PROJECT_SOURCE_DIR}/main.cpp
- ${PROJECT_SOURCE_DIR}/external/imgui/imconfig.h
- ${PROJECT_SOURCE_DIR}/external/imgui/imgui_demo.cpp
- ${PROJECT_SOURCE_DIR}/external/imgui/imgui_draw.cpp
- ${PROJECT_SOURCE_DIR}/external/imgui/imgui_impl_glfw.cpp
- ${PROJECT_SOURCE_DIR}/external/imgui/imgui_impl_glfw.h
- ${PROJECT_SOURCE_DIR}/external/imgui/imgui_impl_opengl3.cpp
- ${PROJECT_SOURCE_DIR}/external/imgui/imgui_impl_opengl3.h
- ${PROJECT_SOURCE_DIR}/external/imgui/imgui_internal.h
- ${PROJECT_SOURCE_DIR}/external/imgui/imgui_widgets.cpp
- ${PROJECT_SOURCE_DIR}/external/imgui/imgui.cpp
- ${PROJECT_SOURCE_DIR}/external/imgui/imgui.h
- ${PROJECT_SOURCE_DIR}/external/imgui/imstb_rectpack.h
-  ${PROJECT_SOURCE_DIR}/external/imgui/imstb_textedit.h
-  ${PROJECT_SOURCE_DIR}/external/imgui/imstb_truetype.h
+    ${PROJECT_SOURCE_DIR}/main.cpp
+    ${PROJECT_SOURCE_DIR}/external/imgui/imconfig.h
+    ${PROJECT_SOURCE_DIR}/external/imgui/imgui_demo.cpp
+    ${PROJECT_SOURCE_DIR}/external/imgui/imgui_draw.cpp
+    ${PROJECT_SOURCE_DIR}/external/imgui/imgui_impl_glfw.cpp
+    ${PROJECT_SOURCE_DIR}/external/imgui/imgui_impl_glfw.h
+    ${PROJECT_SOURCE_DIR}/external/imgui/imgui_impl_opengl3.cpp
+    ${PROJECT_SOURCE_DIR}/external/imgui/imgui_impl_opengl3.h
+    ${PROJECT_SOURCE_DIR}/external/imgui/imgui_internal.h
+    ${PROJECT_SOURCE_DIR}/external/imgui/imgui_widgets.cpp
+    ${PROJECT_SOURCE_DIR}/external/imgui/imgui.cpp
+    ${PROJECT_SOURCE_DIR}/external/imgui/imgui.h
+    ${PROJECT_SOURCE_DIR}/external/imgui/imstb_rectpack.h
+    ${PROJECT_SOURCE_DIR}/external/imgui/imstb_textedit.h
+    ${PROJECT_SOURCE_DIR}/external/imgui/imstb_truetype.h
 )
+
 
 set_property(TARGET main PROPERTY CXX_STANDARD 11)
 target_compile_options(main PRIVATE -Wall)
