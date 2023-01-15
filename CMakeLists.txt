@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.1)
 
-project (Boilerplate)
+project (WikEngine)
 
 add_executable(main
     ${PROJECT_SOURCE_DIR}/main.cpp
@@ -18,7 +18,7 @@ add_executable(main
     ${PROJECT_SOURCE_DIR}/external/imgui/imstb_rectpack.h
     ${PROJECT_SOURCE_DIR}/external/imgui/imstb_textedit.h
     ${PROJECT_SOURCE_DIR}/external/imgui/imstb_truetype.h
-)
+    ${PROJECT_SOURCE_DIR}/Engine/Src/Core/Camera.cpp Engine/Src/Core/Camera.h Engine/Src/Core/ShaderUtility.h Engine/Src/Core/Common.h Engine/Src/Core/Common.cpp Engine/Src/Core/ShaderUtility.cpp)
 
 
 set_property(TARGET main PROPERTY CXX_STANDARD 11)
