@@ -2,6 +2,9 @@ cmake_minimum_required (VERSION 3.1)
 
 project (WikEngine)
 
+file(GLOB ENGINE_SRC CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/Engine/Src/Core/*.cpp  ${PROJECT_SOURCE_DIR}/Engine/Src/Core/*.h)
+
+
 add_executable(main
     ${PROJECT_SOURCE_DIR}/main.cpp
     ${PROJECT_SOURCE_DIR}/external/imgui/imconfig.h
@@ -18,7 +21,8 @@ add_executable(main
     ${PROJECT_SOURCE_DIR}/external/imgui/imstb_rectpack.h
     ${PROJECT_SOURCE_DIR}/external/imgui/imstb_textedit.h
     ${PROJECT_SOURCE_DIR}/external/imgui/imstb_truetype.h
-    ${PROJECT_SOURCE_DIR}/Engine/Src/Core/Camera.cpp Engine/Src/Core/Camera.h Engine/Src/Core/ShaderUtility.h Engine/Src/Core/Common.h Engine/Src/Core/Common.cpp Engine/Src/Core/ShaderUtility.cpp)
+    ${ENGINE_SRC}
+        Engine/Src/Core/ScriptComponent.cpp Engine/Src/Core/ScriptComponent.h)
 
 
 set_property(TARGET main PROPERTY CXX_STANDARD 11)
@@ -37,6 +41,7 @@ target_link_libraries(main PRIVATE glm)
 target_include_directories(main PRIVATE
     ${PROJECT_SOURCE_DIR}/external/imgui
 )
+
 IF(WIN32)
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT main)
 ENDIF()
