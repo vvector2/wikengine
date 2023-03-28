@@ -12,7 +12,7 @@ void Scene::RemoveFromScene(sole::uuid id) {
     head.RemoveChild(id);
 }
 
-std::vector<Entity> Scene::GetChilds() {
+std::vector<Entity*> Scene::GetChilds() {
     return head.GetChilds();
 }
 

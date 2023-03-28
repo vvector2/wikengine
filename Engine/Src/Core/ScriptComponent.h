@@ -6,7 +6,19 @@
 #define WIKENGINE_SCRIPTCOMPONENT_H
 
 
-class ScriptComponent {
+#include "IComponent.h"
+#include "Entity.h"
+
+const std::string ScriptComponentTypeName = "ScriptComponent";
+
+class ScriptComponent: public IComponent {
+public:
+    explicit ScriptComponent(Entity& _entity);
+    std::string GetComponentType() override {return ScriptComponentTypeName;}
+    virtual void Update(float deltaTime) = 0;
+    virtual void Setup() = 0;
+protected:
+    Entity& entity;
 
 };
 

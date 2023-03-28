@@ -2,6 +2,20 @@
 #include <GLFW/glfw3.h>
 #include "Engine/Include/EngineCore.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "Engine/Src/Core/Deserializer.h"
+
+class CubeScript : public ScriptComponent {
+public:
+    explicit CubeScript(Entity & entity): ScriptComponent(entity){};
+    void Update(float deltaTime) override {
+        auto tranform = entity.GetComponent<TransformComponent>();
+        auto mat = tranform->Matrix();
+        tranform->SetMatrix(glm::rotate(tranform->Matrix(), (float) glm::radians(1.0), glm::vec3(1.0, 1.0, 1.0) ));
+    }
+    void Setup() override {
+
+    }
+};
 
 //const char* glsl_version = "#version 130";
 //
@@ -514,7 +528,7 @@ int main(void)
 //	glfwDestroyWindow(window);
 //	glfwTerminate();
 
-    Engine engine(500, 500);
+    Engine engine(1280, 1024);
     engine.Setup();
 
     std::vector<GLfloat> vertexCube = {
@@ -553,9 +567,10 @@ int main(void)
     cameraComponent.SetActive(true);
     TransformComponent transformComponentCamera;
     Entity entityCamera;
-    entityCamera.ID();
+    CameraFirstPersonScriptComponent cameraFirstPersonScriptComponent(entityCamera);
     entityCamera.AddUpdateComponent(cameraComponent);
     entityCamera.AddUpdateComponent(transformComponentCamera);
+    entityCamera.AddUpdateComponent<ScriptComponent>(cameraFirstPersonScriptComponent);
 
     TransformComponent transformComponent;
     auto mat = transformComponent.Matrix();
@@ -569,13 +584,20 @@ int main(void)
     BasicColorMaterial material(glm::vec3(0.5, 0.5, 0.5), shaderProgram);
 
     Entity entity;
+    auto cubeScript = CubeScript(entity);
     entity.AddUpdateComponent(transformComponent);
     entity.AddUpdateComponent(mesh);
     entity.AddUpdateComponent(material);
+    entity.AddUpdateComponent<ScriptComponent>(cubeScript);
+
+    auto entities = ReadFromObj("../teapot.obj");
 
     Scene scene;
     scene.AddToScene(entity);
     scene.AddToScene(entityCamera);
+    scene.AddToScene(*entities[0]);
+
+    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
     engine.Run(scene);
 

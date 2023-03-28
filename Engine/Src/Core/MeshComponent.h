@@ -15,7 +15,7 @@ const std::string MeshComponentTypeName = "MeshComponent";
 class MeshComponent: public IComponent {
 public:
     std::string GetComponentType() override {return MeshComponentTypeName;}
-    MeshComponent(std::vector<GLfloat> vertices, std::vector<GLuint> index);
+    MeshComponent(std::vector<GLfloat>& vertices, std::vector<GLuint>& index);
     void Active();
     void Inactive();
     inline GLuint GetIndicesN() const {return indicesN;}

@@ -3,3 +3,6 @@
 //
 
 #include "ScriptComponent.h"
+
+ScriptComponent::ScriptComponent(Entity &_entity): entity(_entity) {
+}

@@ -13,7 +13,7 @@ class Scene {
 public:
     void AddToScene(Entity& entity);
     void RemoveFromScene(sole::uuid id);
-    std::vector<Entity> GetChilds();
+    std::vector<Entity*> GetChilds();
 private:
     Entity head;
 };

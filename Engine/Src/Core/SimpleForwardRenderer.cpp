@@ -5,17 +5,14 @@
 #include "BasicColorMaterial.h"
 #include "Common.h"
 #include "CameraComponent.h"
-#include "glm/gtc/matrix_transform.hpp"
-#include <glm/gtx/string_cast.hpp>
+#include "ImGuiDebugHelper.h"
 
 void SimpleForwardRenderer::Render(Scene& scene) {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     auto activeCameraProjection = GetActiveCameraProjection(scene);
 
     auto childs = scene.GetChilds();
     for (auto child: childs) {
-        RenderEntity(child, activeCameraProjection);
+        RenderEntity(*child, activeCameraProjection);
     }
 }
 
@@ -44,20 +41,21 @@ void SimpleForwardRenderer::RenderEntity(Entity& entity, glm::mat4 activeCameraP
 
 
     for (auto child: entity.GetChilds()) {
-        RenderEntity(child, activeCameraProjection);
+        RenderEntity(*child, activeCameraProjection);
     }
 }
 
 glm::mat4 SimpleForwardRenderer::GetActiveCameraProjection(Scene& scene) {
     auto childs = scene.GetChilds();
-    auto cameras = Filter<Entity>(scene.GetChilds(),  [](Entity entity){
-        auto camera = entity.GetComponent<CameraComponent>();
+    auto cameras = Filter<Entity*>(scene.GetChilds(),  [](Entity* entity){
+        auto camera = entity->GetComponent<CameraComponent>();
         return camera != nullptr && camera->IsActive();
         }
     );
     if (!cameras.empty()){
-        auto camera = cameras[0].GetComponent<CameraComponent>();
-        auto cameraTransform = cameras[0].GetComponent<TransformComponent>();
+        auto camera = cameras[0]->GetComponent<CameraComponent>();
+        auto cameraTransform = cameras[0]->GetComponent<TransformComponent>();
+        ImGuiDebugHelper::renderDebugData.activeCamePosition = glm::vec3(cameraTransform->Matrix()[3][0], cameraTransform->Matrix()[3][1], cameraTransform->Matrix()[3][2]);
         auto activeCameraProjection = camera->Projection() * cameraTransform->Matrix();
         return activeCameraProjection;
     }

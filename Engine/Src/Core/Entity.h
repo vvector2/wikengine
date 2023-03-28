@@ -13,7 +13,7 @@
 class Entity {
 public:
     Entity();
-    std::vector<Entity> GetChilds();
+    std::vector<Entity*> GetChilds();
     void AddChild(Entity& entity);
     void RemoveChild(sole::uuid id);
 
@@ -29,10 +29,15 @@ public:
 
     template <typename T>
     void AddUpdateComponent(T &component) {
+        if (components.find(typeid(T).name()) != components.end())
+            throw std::runtime_error("First Remove existing component");
+
         components[typeid(T).name()] = &component;
     }
 
     sole::uuid ID() const;
+
+    ~Entity();
 private:
     sole::uuid id;
     std::map<std::string , Entity*> childs;

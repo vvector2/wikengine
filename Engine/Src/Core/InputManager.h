@@ -17,10 +17,16 @@ public:
     static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void Reset();
+    static float MouseX() { return mouseX;}
+    static float MouseY() { return mouseY;}
+    static float ScrollY() { return scrollY;}
+    static int KeyState(int key) { return keys[key];}
+    static int FirstMouse() { return firstMouse;}
 private:
-    static double mouseX;
-    static double mouseY;
-    static double scrollY;
+    static bool firstMouse;
+    static float mouseX;
+    static float mouseY;
+    static float scrollY;
     static std::array<int, INPUT_MANAGER_KEY_SIZE_RANGE> keys;
 };
 

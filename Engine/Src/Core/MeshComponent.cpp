@@ -4,7 +4,7 @@
 
 #include "MeshComponent.h"
 
-MeshComponent::MeshComponent(std::vector<GLfloat> vertices, std::vector<GLuint> index) {
+MeshComponent::MeshComponent(std::vector<GLfloat>& vertices, std::vector<GLuint>& index) {
     glCreateBuffers(1, &bufferID);
     glBindBuffer(GL_ARRAY_BUFFER, bufferID);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof (GLfloat), &vertices[0], GL_STATIC_DRAW);

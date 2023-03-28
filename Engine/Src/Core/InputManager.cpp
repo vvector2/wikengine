@@ -2,6 +2,7 @@
 // Created by wiktor on 09.02.23.
 //
 
+#include <iostream>
 #include "InputManager.h"
 
 void InputManager::mouseCallback(GLFWwindow *window, double xposIn, double yposIn) {
@@ -28,8 +29,8 @@ void InputManager::Reset() {
 
 }
 
-double InputManager::mouseX;
-double InputManager::mouseY;
-double InputManager::scrollY;
+float InputManager::mouseX;
+float InputManager::mouseY;
+float InputManager::scrollY;
 std::array<int, INPUT_MANAGER_KEY_SIZE_RANGE> InputManager::keys;
 
