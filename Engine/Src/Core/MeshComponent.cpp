@@ -4,7 +4,7 @@
 
 #include "MeshComponent.h"
 
-MeshComponent::MeshComponent(std::vector<GLfloat>& vertices, std::vector<GLuint>& index) {
+MeshComponent::MeshComponent(std::vector<GLfloat>& vertices, std::vector<GLuint>& index, GLboolean _line): line(_line)  {
     glCreateBuffers(1, &bufferID);
     glBindBuffer(GL_ARRAY_BUFFER, bufferID);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof (GLfloat), &vertices[0], GL_STATIC_DRAW);
@@ -40,4 +40,21 @@ void MeshComponent::Inactive() {
 MeshComponent::~MeshComponent() {
     glDeleteBuffers(1, &bufferID);
     glDeleteBuffers(1, &bufferIndexID);
+}
+
+void MeshComponent::Render() {
+    if (!line){
+        glDrawElements(
+                GL_TRIANGLES,
+                indicesN,
+                GL_UNSIGNED_INT,
+                (void*)0
+        );
+    } else {
+        glDrawArrays(
+                GL_LINES,
+                0,
+                indicesN
+        );
+    }
 }

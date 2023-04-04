@@ -5,7 +5,6 @@
 #include "BasicColorMaterial.h"
 #include "Common.h"
 #include "CameraComponent.h"
-#include "ImGuiDebugHelper.h"
 
 void SimpleForwardRenderer::Render(Scene& scene) {
     auto activeCameraProjection = GetActiveCameraProjection(scene);
@@ -28,12 +27,7 @@ void SimpleForwardRenderer::RenderEntity(Entity& entity, glm::mat4 activeCameraP
 
         mesh->Active();
 
-        glDrawElements(
-                GL_TRIANGLES,
-                mesh->GetIndicesN(),
-                GL_UNSIGNED_INT,
-                (void*)0
-        );
+        mesh->Render();
 
         mesh->Inactive();
         basicColorMaterial->InActive();
@@ -55,7 +49,6 @@ glm::mat4 SimpleForwardRenderer::GetActiveCameraProjection(Scene& scene) {
     if (!cameras.empty()){
         auto camera = cameras[0]->GetComponent<CameraComponent>();
         auto cameraTransform = cameras[0]->GetComponent<TransformComponent>();
-        ImGuiDebugHelper::renderDebugData.activeCamePosition = glm::vec3(cameraTransform->Matrix()[3][0], cameraTransform->Matrix()[3][1], cameraTransform->Matrix()[3][2]);
         auto activeCameraProjection = camera->Projection() * cameraTransform->Matrix();
         return activeCameraProjection;
     }

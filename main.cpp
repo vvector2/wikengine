@@ -591,6 +591,7 @@ int main(void)
     entity.AddUpdateComponent<ScriptComponent>(cubeScript);
 
     auto entities = ReadFromObj("../teapot.obj");
+    entities[0]->AddUpdateComponent(material);
 
     Scene scene;
     scene.AddToScene(entity);

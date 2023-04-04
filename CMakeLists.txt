@@ -22,7 +22,7 @@ add_executable(main
     ${PROJECT_SOURCE_DIR}/external/imgui/imstb_textedit.h
     ${PROJECT_SOURCE_DIR}/external/imgui/imstb_truetype.h
     ${ENGINE_SRC}
-        Engine/Src/Core/ImGuiDebugHelper.cpp Engine/Src/Core/ImGuiDebugHelper.h)
+)
 
 
 set_property(TARGET main PROPERTY CXX_STANDARD 11)

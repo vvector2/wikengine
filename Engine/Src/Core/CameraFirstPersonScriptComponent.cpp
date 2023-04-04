@@ -6,6 +6,7 @@
 #include "CameraFirstPersonScriptComponent.h"
 #include "TransformComponent.h"
 #include "InputManager.h"
+#include "ImGuiDebugHelper.h"
 #include <glm/gtx/string_cast.hpp>
 
 void CameraFirstPersonScriptComponent::Setup() {
@@ -38,7 +39,6 @@ void CameraFirstPersonScriptComponent::Update(float deltaTime) {
     cameraFirstPerson->ProcessKeyboard(dir, deltaTime);
     cameraFirstPerson->ProcessMouseScroll(InputManager::ScrollY());
 
-
     if (firstMouse)
     {
         lastX = InputManager::MouseX();
@@ -54,9 +54,10 @@ void CameraFirstPersonScriptComponent::Update(float deltaTime) {
 
     cameraFirstPerson->ProcessMouseMovement(xoffset, yoffset);
 
-
     auto tranform = entity.GetComponent<TransformComponent>();
     tranform->SetMatrix(cameraFirstPerson->GetViewMatrix());
+
+    ImGuiDebugHelper::renderDebugData.activeCamePosition = glm::vec3(cameraFirstPerson->Pos().x, cameraFirstPerson->Pos().y, cameraFirstPerson->Pos().z );
 }
 
 CameraFirstPersonScriptComponent::CameraFirstPersonScriptComponent(Entity& _entity): ScriptComponent(_entity) {

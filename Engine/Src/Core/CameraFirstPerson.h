@@ -22,6 +22,7 @@ public:
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
     void ProcessMouseScroll(float yoffset);
 
+    glm::vec3 Pos() {return pos;}
     inline float Zoom() const {return zoom;}
     inline void SetZoom(float _zoom) {zoom = _zoom;}
 private:
