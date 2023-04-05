@@ -531,36 +531,114 @@ int main(void)
     Engine engine(1280, 1024);
     engine.Setup();
 
+
     std::vector<GLfloat> vertexCube = {
             1.f, 1.f, 1.f,
             -1.f, 1.f, 1.f,
             1.f, -1.f, 1.f,
+
             -1.f, -1.f, 1.f,
+            -1.f, 1.f, 1.f,
+            1.f, -1.f, 1.f,
 
             1.f, 1.f, -1.f,
             -1.f, 1.f, -1.f,
             1.f, -1.f, -1.f,
+
             -1.f, -1.f, -1.f,
+            -1.f, 1.f, -1.f,
+            1.f, -1.f, -1.f,
+
+            1.f, 1.f, 1.f,
+            -1.f, 1.f, 1.f,
+            1.f, 1.f, -1.f,
+
+            -1.f, 1.f, 1.f,
+            1.f, 1.f, -1.f,
+            -1.f, 1.f, -1.f,
+
+            1.f, -1.f, 1.f,
+            -1.f, -1.f, 1.f,
+            1.f, -1.f, -1.f,
+
+            -1.f, -1.f, 1.f,
+            1.f, -1.f, -1.f,
+            -1.f, -1.f, -1.f,
+
+            -1.f, -1.f, 1.f,
+            -1.f, -1.f, -1.f,
+            -1.f, 1.f, -1.f,
+
+            -1.f, 1.f, 1.f,
+            -1.f, 1.f, -1.f,
+            -1.f, -1.f, 1.f,
+
+            1.f, -1.f, 1.f,
+            1.f, -1.f, -1.f,
+            1.f, 1.f, -1.f,
+
+            1.f, 1.f, 1.f,
+            1.f, 1.f, -1.f,
+            1.f, -1.f, 1.f,
     };
 
-    std::vector<GLuint> vertexIndexCube = {
-            0, 1, 2,
-            3 ,1, 2,
+    std::vector<GLuint> indexCube = {
+            0,1,2, 3,4,5,
+            6,7,8, 9,10,11,
+            12,13,14, 15,16,17,
+            18,19,20, 21,22,23,
+            24,25,26, 27,28,29,
+           30,31,32, 33,34,35
+    };
 
-            4, 5, 6,
-            5, 6, 7,
+    std::vector<GLfloat> g_uv_buffer_data = {
+        1.f, 1.f,
+        0.f, 1.f,
+        1.f, 0.f,
 
-            0, 1, 4,
-            1, 4, 5,
+        0.f, 0.f,
+        0.f, 1.f,
+        1.f, 0.f,
 
-            2, 3, 6,
-            3, 6, 7,
+        1.f, 1.f,
+        0.f, 1.f,
+        1.f, 0.f,
 
-            1, 3, 5,
-            3, 5, 7,
+        0.f, 0.f,
+        0.f, 1.f,
+        1.f, 0.f,
 
-            0, 2, 4,
-            2, 4, 6
+        0.f, 0.f,
+        0.f, 1.f,
+        1.f, 0.f,
+
+        0.f, 1.f,
+        1.f, 0.f,
+        1.f, 1.f,
+
+        0.f, 0.f,
+        0.f, 1.f,
+        1.f, 0.f,
+
+        0.f, 1.f,
+        1.f, 0.f,
+        1.f, 1.f,
+
+        0.f, 0.f,
+        0.f, 1.f,
+        1.f, 0.f,
+
+        0.f, 0.f,
+        0.f, 1.f,
+        1.f, 0.f,
+
+        0.f, 0.f,
+        0.f, 1.f,
+        1.f, 0.f,
+
+        0.f, 0.f,
+        0.f, 1.f,
+        1.f, 0.f,
     };
 
     CameraComponent cameraComponent(glm::radians(45.f), 4.0f / 3.0f, 0.1f, 100000.0f);
@@ -576,29 +654,34 @@ int main(void)
     auto mat = transformComponent.Matrix();
     transformComponent.SetMatrix(glm::translate(mat, glm::vec3(0,0, -4)));
 
-    MeshComponent mesh(vertexCube, vertexIndexCube);
+    MeshComponent mesh(vertexCube, indexCube);
 
     auto basicColorVS = ReadFile("../Engine/Src/Core/Shaders/BasicColor.vs.glsl");
     auto basicColorFS = ReadFile("../Engine/Src/Core/Shaders/BasicColor.fs.glsl");
     ShaderProgram shaderProgram(basicColorVS, basicColorFS);
     BasicColorMaterial material(glm::vec3(0.5, 0.5, 0.5), shaderProgram);
 
+    auto basicTextureVS = ReadFile("../Engine/Src/Core/Shaders/BasicTexture.vs.glsl");
+    auto basicTextureFS = ReadFile("../Engine/Src/Core/Shaders/BasicTexture.fs.glsl");
+    ShaderProgram shaderProgramBasictexture(basicTextureVS, basicTextureFS);
+    SimpleTextureMaterial basicTextureMaterial(shaderProgramBasictexture, "../kot.png", g_uv_buffer_data);
+
     Entity entity;
     auto cubeScript = CubeScript(entity);
     entity.AddUpdateComponent(transformComponent);
     entity.AddUpdateComponent(mesh);
-    entity.AddUpdateComponent(material);
+    entity.AddUpdateComponent(basicTextureMaterial);
     entity.AddUpdateComponent<ScriptComponent>(cubeScript);
 
-    auto entities = ReadFromObj("../teapot.obj");
-    entities[0]->AddUpdateComponent(material);
+//    auto entities = ReadFromObj("../teapot.obj");
+//    entities[0]->AddUpdateComponent(material);
 
     Scene scene;
     scene.AddToScene(entity);
     scene.AddToScene(entityCamera);
-    scene.AddToScene(*entities[0]);
+    //scene.AddToScene(*entities[0]);
 
-    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
     engine.Run(scene);
 

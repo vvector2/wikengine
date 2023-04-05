@@ -33,6 +33,10 @@ void Engine::Setup() {
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+    glEnable(GL_DEPTH_TEST);
+
+    glDepthFunc(GL_LESS);
+
     imGuiDebugHelper = new ImGuiDebugHelper(window);
 }
 

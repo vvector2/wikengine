@@ -18,19 +18,19 @@ void SimpleForwardRenderer::Render(Scene& scene) {
 void SimpleForwardRenderer::RenderEntity(Entity& entity, glm::mat4 activeCameraProjection) {
     auto mesh = entity.GetComponent<MeshComponent>();
     auto transform = entity.GetComponent<TransformComponent>();
-    auto basicColorMaterial = entity.GetComponent<BasicColorMaterial>();
-    if (mesh != nullptr && transform != nullptr && basicColorMaterial != nullptr) {
-        basicColorMaterial->Active();
+    //auto basicColorMaterial = entity.GetComponent<BasicColorMaterial>();
+    auto basicTextureMaterial = entity.GetComponent<SimpleTextureMaterial>();
+    if (mesh != nullptr && transform != nullptr && basicTextureMaterial != nullptr ) {
+        basicTextureMaterial->Active();
 
         auto mvp =  activeCameraProjection * transform->Matrix();
-        glUniformMatrix4fv(basicColorMaterial->GetShaderProgram().GetMatrixIdUniform(), 1, GL_FALSE, &mvp[0][0]);
+        glUniformMatrix4fv(basicTextureMaterial->GetShaderProgram().GetMatrixIdUniform(), 1, GL_FALSE, &mvp[0][0]);
 
         mesh->Active();
-
         mesh->Render();
-
         mesh->Inactive();
-        basicColorMaterial->InActive();
+
+        basicTextureMaterial->InActive();
     }
 
 
