@@ -10,6 +10,9 @@
 #include <sstream>
 #include <algorithm>
 #include "../../../external/sole/sole.hpp"
+#include <glm/glm.hpp>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 std::string ReadFile(const std::string& path);
 
@@ -21,6 +24,11 @@ std::vector<T> Filter(std::vector<T> arr, std::function<bool(T)> pred){
 }
 
 sole::uuid GenerateUUID();
+
+std::vector<GLuint> GetSequenceOfConsecutiveNumbers(int n);
+
+void CalcBox2d(std::vector<GLfloat> &vertices, glm::vec3 &min, glm::vec3 &max);
+void CalcBox2d(std::vector<GLfloat> &vertices, std::vector<GLuint> &indexes, glm::vec3 &min, glm::vec3 &max);
 
 class NotImplemented : public std::logic_error
 {

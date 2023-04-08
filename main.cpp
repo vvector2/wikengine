@@ -1,8 +1,10 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <iostream>
 #include "Engine/Include/EngineCore.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "Engine/Src/Core/Deserializer.h"
+#include <glm/gtx/string_cast.hpp>
 
 class CubeScript : public ScriptComponent {
 public:
@@ -673,15 +675,17 @@ int main(void)
     entity.AddUpdateComponent(basicTextureMaterial);
     entity.AddUpdateComponent<ScriptComponent>(cubeScript);
 
-//    auto entities = ReadFromObj("../teapot.obj");
-//    entities[0]->AddUpdateComponent(material);
+    auto entities = ReadFromObj("../dedust2/de_dust2.obj", shaderProgramBasictexture);
 
     Scene scene;
-    scene.AddToScene(entity);
+    //scene.AddToScene(entity);
     scene.AddToScene(entityCamera);
-    //scene.AddToScene(*entities[0]);
 
-    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    for (auto objEnt: entities) {
+        scene.AddToScene(*objEnt);
+    }
+
+    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
     engine.Run(scene);
 

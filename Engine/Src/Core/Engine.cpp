@@ -55,6 +55,7 @@ void Engine::Run(Scene& scene) {
             UpdateEntity(*child);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(0.95, 0.95, 0.95, 1);
 
         if (imGuiDebugHelper != nullptr){
             imGuiDebugHelper->Render();

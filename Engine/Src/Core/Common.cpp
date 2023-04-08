@@ -16,3 +16,53 @@ std::string ReadFile(const std::string& path) {
 sole::uuid GenerateUUID() {
     return sole::uuid4();
 }
+
+std::vector<GLuint> GetSequenceOfConsecutiveNumbers(int n) {
+    std::vector<GLuint> result;
+    for(int i = 0; i < n ; i ++) {
+        result.push_back(i);
+    }
+    return result;
+}
+
+void CalcBox2d(std::vector<GLfloat> &vertices, glm::vec3 &minOut, glm::vec3 &maxOut) {
+    std::vector<GLfloat> x;
+    std::vector<GLfloat> y;
+    std::vector<GLfloat> z;
+
+    for(int i =0; i * 3 < vertices.size(); i++ ) {
+        x.push_back(vertices[i * 3]);
+        y.push_back(vertices[i * 3 + 1]);
+        z.push_back(vertices[i * 3 + 2]);
+    }
+
+    auto maxX = std::max_element(x.begin(), x.end());
+    auto minX = std::min_element(x.begin(), x.end());
+
+    auto maxY = std::max_element(y.begin(), y.end());
+    auto minY = std::min_element(y.begin(), y.end());
+
+    auto maxZ = std::max_element(z.begin(), z.end());
+    auto minZ = std::min_element(z.begin(), z.end());
+
+    minOut.x = *minX;
+    minOut.y = *minY;
+    minOut.z = *minZ;
+
+    maxOut.x = *maxX;
+    maxOut.y = *maxY;
+    maxOut.z = *maxZ;
+
+}
+
+void CalcBox2d(std::vector<GLfloat> &vertices, std::vector<GLuint> &indexes, glm::vec3 &min, glm::vec3 &max) {
+    std::vector<GLfloat> vert;
+
+    for(auto index : indexes){
+        vert.push_back(vertices[index * 3]);
+        vert.push_back(vertices[index * 3 + 1]);
+        vert.push_back(vertices[index * 3 + 2]);
+    }
+
+    CalcBox2d(vert, min, max);
+}
