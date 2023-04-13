@@ -675,17 +675,19 @@ int main(void)
     entity.AddUpdateComponent(basicTextureMaterial);
     entity.AddUpdateComponent<ScriptComponent>(cubeScript);
 
-    auto entities = ReadFromObj("../dedust2/de_dust2.obj", shaderProgramBasictexture);
+    auto objEntity = ReadFromObj("../dedust2/de_dust2.obj", shaderProgramBasictexture);
+
+    auto objTransform = objEntity->GetComponent<TransformComponent>();
+    objTransform->SetMatrix(rotate(objTransform->Matrix(), - glm::pi<float>() /2 , glm::vec3(1,0,0) ));
 
     Scene scene;
     //scene.AddToScene(entity);
+
     scene.AddToScene(entityCamera);
+    scene.AddToScene(*objEntity);
 
-    for (auto objEnt: entities) {
-        scene.AddToScene(*objEnt);
-    }
 
-    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
     engine.Run(scene);
 

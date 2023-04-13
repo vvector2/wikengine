@@ -12,7 +12,7 @@
 #include "Common.h"
 #include "BasicColorMaterial.h"
 
-std::vector<Entity*> ReadFromObj(const std::string& path, ShaderProgram &shaderProgramBasictexture) {
+Entity* ReadFromObj(const std::string& path, ShaderProgram &shaderProgramBasictexture) {
     std::vector<Entity*> result;
 
     tinyobj::ObjReader reader;
@@ -63,17 +63,20 @@ std::vector<Entity*> ReadFromObj(const std::string& path, ShaderProgram &shaderP
         auto entity = new Entity();
         auto trans = new TransformComponent();
         auto mesh = new MeshComponent(shapeVertices, shapeIndex);
-        auto mat = new SimpleTextureMaterial(shaderProgramBasictexture, texturePath, shapeUV);
+        auto mat = new SimpleTextureMaterial(shaderProgramBasictexture, "../dedust2/" + texturePath, shapeUV);
 
         entity->AddUpdateComponent(*trans);
         entity->AddUpdateComponent(*mesh);
         entity->AddUpdateComponent(*mat);
         result.push_back(entity);
     }
-//
-//    auto fatherEntity = new Entity();
-//    for(auto child : result)
-//        fatherEntity->AddChild(*child);
 
-    return result;
+    auto fatherEntity = new Entity();
+    auto fatherTrans = new TransformComponent();
+    fatherEntity->AddUpdateComponent(*fatherTrans);
+
+    for(auto child : result)
+        fatherEntity->AddChild(*child);
+
+    return fatherEntity;
 }

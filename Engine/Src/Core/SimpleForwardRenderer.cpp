@@ -35,7 +35,7 @@ void SimpleForwardRenderer::RenderEntity(Entity& entity, glm::mat4 activeCameraP
 
 
     for (auto child: entity.GetChilds()) {
-        RenderEntity(*child, activeCameraProjection);
+        RenderEntity(*child, activeCameraProjection * transform->Matrix());
     }
 }
 
