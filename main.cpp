@@ -675,7 +675,7 @@ int main(void)
     entity.AddUpdateComponent(basicTextureMaterial);
     entity.AddUpdateComponent<ScriptComponent>(cubeScript);
 
-    auto objEntity = ReadFromObj("../dedust2/de_dust2.obj", shaderProgramBasictexture);
+    auto objEntity = ReadFromObj("../teapot.obj", shaderProgram);
 
     auto objTransform = objEntity->GetComponent<TransformComponent>();
     objTransform->SetMatrix(rotate(objTransform->Matrix(), - glm::pi<float>() /2 , glm::vec3(1,0,0) ));

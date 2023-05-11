@@ -12,12 +12,46 @@
 #include "Common.h"
 #include "BasicColorMaterial.h"
 
+
+Entity* ProcessOneItem(const std::vector<tinyobj::index_t>& indices,
+                       const std::vector<tinyobj::real_t>& vert,
+                       const std::vector<tinyobj::real_t>& uv,
+                       const tinyobj::material_t& materials,
+                       const ShaderProgram& shaderProgram) {
+
+    std::vector<GLfloat> shapeVertices;
+    std::vector<GLfloat> shapeUV;
+    for (auto index: indices) {
+        shapeVertices.push_back(vert[index.vertex_index * 3]);
+        shapeVertices.push_back(vert[index.vertex_index * 3 + 1]);
+        shapeVertices.push_back(vert[index.vertex_index * 3 + 2]);
+
+//        shapeUV.push_back(uv[index.texcoord_index * 2]);
+//        shapeUV.push_back(uv[index.texcoord_index * 2 + 1]);
+    }
+
+    auto shapeIndex = GetSequenceOfConsecutiveNumbers(indices.size());
+    //auto texturePath = materials.diffuse_texname;
+
+    auto entity = new Entity();
+    auto trans = new TransformComponent();
+    auto mesh = new MeshComponent(shapeVertices, shapeIndex);
+    auto mat = new BasicColorMaterial(glm::vec3(0.5, 0.5, 0.5), shaderProgram);
+
+    entity->AddUpdateComponent(*trans);
+    entity->AddUpdateComponent(*mesh);
+    entity->AddUpdateComponent(*mat);
+
+    return entity;
+}
+
+
 Entity* ReadFromObj(const std::string& path, ShaderProgram &shaderProgramBasictexture) {
     std::vector<Entity*> result;
 
     tinyobj::ObjReader reader;
     tinyobj::ObjReaderConfig reader_config;
-    reader_config.mtl_search_path = "../dedust2/";
+    reader_config.mtl_search_path = "../";
 
     if (!reader.ParseFromFile(path, reader_config))
         if (!reader.Error().empty())
@@ -37,38 +71,16 @@ Entity* ReadFromObj(const std::string& path, ShaderProgram &shaderProgramBasicte
     glm::vec3 max;
     CalcBox2d(vertices, min, max);
 
-    std::vector<GLfloat> arr = {abs(min.x), abs(max.x), abs(min.y), abs(max.y), abs(min.z), abs(max.z) };
-    auto scaleFactor = 1 / (*std::max_element(arr.begin(), arr.end()));
-
-    std::vector<GLfloat> scaledVert;
-    transform(vertices.begin(), vertices.end(), back_inserter(scaledVert), [scaleFactor](float x) { return x * scaleFactor; } );
+    std::vector<GLfloat> scaledVert = ScaleVerticesToBoundingBox(min, max, vertices);
 
     for(auto shape: shapes) {
-        auto shapeIndeces = shape.mesh.indices;
-
-        std::vector<GLfloat> shapeVertices;
-        std::vector<GLfloat> shapeUV;
-        for (auto index: shapeIndeces) {
-            shapeVertices.push_back(scaledVert[index.vertex_index * 3]);
-            shapeVertices.push_back(scaledVert[index.vertex_index * 3 + 1]);
-            shapeVertices.push_back(scaledVert[index.vertex_index * 3 + 2]);
-
-            shapeUV.push_back(attrib.texcoords[index.texcoord_index * 2]);
-            shapeUV.push_back(attrib.texcoords[index.texcoord_index * 2 + 1]);
-        }
-
-        auto shapeIndex = GetSequenceOfConsecutiveNumbers(shapeIndeces.size());
-        auto texturePath = materials[shape.mesh.material_ids[0]].diffuse_texname;
-
-        auto entity = new Entity();
-        auto trans = new TransformComponent();
-        auto mesh = new MeshComponent(shapeVertices, shapeIndex);
-        auto mat = new SimpleTextureMaterial(shaderProgramBasictexture, "../dedust2/" + texturePath, shapeUV);
-
-        entity->AddUpdateComponent(*trans);
-        entity->AddUpdateComponent(*mesh);
-        entity->AddUpdateComponent(*mat);
-        result.push_back(entity);
+        result.push_back(
+                ProcessOneItem(shape.mesh.indices,
+                               scaledVert,
+                               attrib.texcoords,
+                               materials[shape.mesh.material_ids[0]],
+                               shaderProgramBasictexture)
+                );
     }
 
     auto fatherEntity = new Entity();

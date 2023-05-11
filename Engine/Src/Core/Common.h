@@ -29,6 +29,7 @@ std::vector<GLuint> GetSequenceOfConsecutiveNumbers(int n);
 
 void CalcBox2d(std::vector<GLfloat> &vertices, glm::vec3 &min, glm::vec3 &max);
 void CalcBox2d(std::vector<GLfloat> &vertices, std::vector<GLuint> &indexes, glm::vec3 &min, glm::vec3 &max);
+std::vector<GLfloat> ScaleVerticesToBoundingBox(glm::vec3 min, glm::vec3 max, std::vector<GLfloat>& vertices);
 
 class NotImplemented : public std::logic_error
 {

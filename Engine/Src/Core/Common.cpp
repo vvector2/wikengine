@@ -66,3 +66,12 @@ void CalcBox2d(std::vector<GLfloat> &vertices, std::vector<GLuint> &indexes, glm
 
     CalcBox2d(vert, min, max);
 }
+
+std::vector<GLfloat> ScaleVerticesToBoundingBox(glm::vec3 min, glm::vec3 max, std::vector<GLfloat>& vertices) {
+    std::vector<GLfloat> arr = {abs(min.x), abs(max.x), abs(min.y), abs(max.y), abs(min.z), abs(max.z) };
+    auto scaleFactor = 1 / (*std::max_element(arr.begin(), arr.end()));
+
+    std::vector<GLfloat> scaledVert;
+    transform(vertices.begin(), vertices.end(), back_inserter(scaledVert), [scaleFactor](float x) { return x * scaleFactor; } );
+    return scaledVert;
+}
