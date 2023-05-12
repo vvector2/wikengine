@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include "ShaderProgram.h"
 
-ShaderProgram::ShaderProgram(std::string vertexShader, std::string fragmentShader) {
+ShaderProgram::ShaderProgram(std::string& vertexShader, std::string& fragmentShader) {
     auto vertextShaderId = LoadShader(vertexShader, GL_VERTEX_SHADER);
     auto fragmentShaderId = LoadShader(fragmentShader, GL_FRAGMENT_SHADER);
 
@@ -35,11 +35,9 @@ ShaderProgram::ShaderProgram(std::string vertexShader, std::string fragmentShade
     glDeleteShader(fragmentShaderId);
 
     shaderProgramId = programId;
-
-    matrixIdUniform = glGetUniformLocation(programId, mvpUniformName.c_str());
 }
 
-GLuint ShaderProgram::LoadShader(std::string shaderContent, GLenum shaderType) {
+GLuint ShaderProgram::LoadShader(std::string& shaderContent, GLenum shaderType) {
     GLuint shaderID = glCreateShader(shaderType);
 
     GLint Result = GL_FALSE;

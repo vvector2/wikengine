@@ -8,13 +8,18 @@
 
 #include "Scene.h"
 #include "CameraComponent.h"
+#include "DirectionaLight.h"
 
 class SimpleForwardRenderer {
 public:
-    void Render(Scene& scene);
+    void Render(Scene &scene);
+
 private:
-    void RenderEntity(Entity& entity, glm::mat4 activeCameraProjection);
-    glm::mat4 GetActiveCameraProjection(Scene& scene);
+    void RenderEntity(Entity &entity, glm::mat4 &activeCameraProjection, DirectionaLight &directionalLight);
+
+    glm::mat4 GetActiveCameraProjection(Scene &scene);
+
+    DirectionaLight *GetDirectionalLightFromScene(Scene &scene);
 };
 
 

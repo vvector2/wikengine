@@ -14,12 +14,13 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-std::string ReadFile(const std::string& path);
 
-template <typename T>
-std::vector<T> Filter(std::vector<T> arr, std::function<bool(T)> pred){
+std::string ReadFile(const std::string &path);
+
+template<typename T>
+std::vector<T> Filter(std::vector<T> arr, std::function<bool(T)> pred) {
     std::vector<T> result;
-    std::copy_if (arr.begin(), arr.end(), std::back_inserter(result), pred );
+    std::copy_if(arr.begin(), arr.end(), std::back_inserter(result), pred);
     return result;
 }
 
@@ -28,13 +29,14 @@ sole::uuid GenerateUUID();
 std::vector<GLuint> GetSequenceOfConsecutiveNumbers(int n);
 
 void CalcBox2d(std::vector<GLfloat> &vertices, glm::vec3 &min, glm::vec3 &max);
-void CalcBox2d(std::vector<GLfloat> &vertices, std::vector<GLuint> &indexes, glm::vec3 &min, glm::vec3 &max);
-std::vector<GLfloat> ScaleVerticesToBoundingBox(glm::vec3 min, glm::vec3 max, std::vector<GLfloat>& vertices);
 
-class NotImplemented : public std::logic_error
-{
+void CalcBox2d(std::vector<GLfloat> &vertices, std::vector<GLuint> &indexes, glm::vec3 &min, glm::vec3 &max);
+
+std::vector<GLfloat> ScaleVerticesToBoundingBox(glm::vec3 min, glm::vec3 max, std::vector<GLfloat> &vertices);
+
+class NotImplemented : public std::logic_error {
 public:
-    NotImplemented() : std::logic_error("Function not yet implemented") { };
+    NotImplemented() : std::logic_error("Function not yet implemented") {};
 };
 
 #endif //WIKENGINE_COMMON_H

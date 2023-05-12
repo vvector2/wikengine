@@ -7,14 +7,14 @@
 #include "Engine.h"
 #include "InputManager.h"
 #include "ScriptComponent.h"
+#include "Helpers/BasicCube.h"
 
 void Engine::Setup() {
     if (!glfwInit())
         throw std::runtime_error("Failed to init glfw lib");
 
     window = glfwCreateWindow(initWidth, initHeight, "Hello World", NULL, NULL);
-    if (!window)
-    {
+    if (!window) {
         glfwTerminate();
         throw std::runtime_error("Failed to create window");
     }
@@ -40,24 +40,23 @@ void Engine::Setup() {
     imGuiDebugHelper = new ImGuiDebugHelper(window);
 }
 
-void Engine::Run(Scene& scene) {
-    for(auto child: scene.GetChilds())
+void Engine::Run(Scene &scene) {
+    for (auto child: scene.GetChilds())
         SetupEntity(*child);
 
-    while (!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         if (InputManager::KeyState(GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
 
         HandleDeltaTime();
 
-        for(auto child: scene.GetChilds())
+        for (auto child: scene.GetChilds())
             UpdateEntity(*child);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.95, 0.95, 0.95, 1);
 
-        if (imGuiDebugHelper != nullptr){
+        if (imGuiDebugHelper != nullptr) {
             imGuiDebugHelper->Render();
         }
 
@@ -69,7 +68,7 @@ void Engine::Run(Scene& scene) {
 }
 
 Engine::~Engine() {
-    if(window != nullptr)
+    if (window != nullptr)
         glfwDestroyWindow(window);
     glfwTerminate();
     delete imGuiDebugHelper;
@@ -85,27 +84,27 @@ void Engine::HandleDeltaTime() {
     lastFrame = currentFrame;
 }
 
-Engine::Engine(GLint _initWidth, GLint _initHeight): initWidth(_initWidth), initHeight(_initHeight) {
+Engine::Engine(GLint _initWidth, GLint _initHeight) : initWidth(_initWidth), initHeight(_initHeight) {
     deltaTime = 0;
     lastFrame = 0;
 }
 
 void Engine::SetupEntity(Entity &entity) {
     auto scriptComponent = entity.GetComponent<ScriptComponent>();
-    if(scriptComponent != nullptr)
+    if (scriptComponent != nullptr)
         scriptComponent->Setup();
 
-    for(auto child: entity.GetChilds()){
+    for (auto child: entity.GetChilds()) {
         SetupEntity(*child);
     }
 }
 
 void Engine::UpdateEntity(Entity &entity) {
     auto scriptComponent = entity.GetComponent<ScriptComponent>();
-    if(scriptComponent != nullptr)
+    if (scriptComponent != nullptr)
         scriptComponent->Update(deltaTime);
 
-    for(auto child: entity.GetChilds()){
+    for (auto child: entity.GetChilds()) {
         UpdateEntity(*child);
     }
 }

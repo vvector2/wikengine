@@ -9,19 +9,15 @@
 #include <string>
 #include "GL/glew.h"
 
-const std::string mvpUniformName = "mvp";
-
 class ShaderProgram {
 public:
-    ShaderProgram(std::string vertexShader, std::string fragmentShader);
+    ShaderProgram(std::string& vertexShader, std::string& fragmentShader);
     inline GLuint GetShaderProgramId() const {return shaderProgramId;}
-    inline GLuint GetMatrixIdUniform() const {return matrixIdUniform;}
     void Active();
     void Inactive();
 private:
-    GLuint LoadShader(std::string shaderContent, GLenum shaderType);
+    GLuint LoadShader(std::string& shaderContent, GLenum shaderType);
     GLuint shaderProgramId;
-    GLuint matrixIdUniform;
 };
 
 
