@@ -4,32 +4,32 @@
 
 #include "MeshComponent.h"
 
-MeshComponent::MeshComponent(std::vector<GLfloat>& vertices,
-                             std::vector<GLfloat>& color,
-                             std::vector<GLfloat>& normal,
-                             std::vector<GLfloat>& uv,
-                             std::vector<GLuint>& index){
+MeshComponent::MeshComponent(std::vector<GLfloat> &vertices,
+                             std::vector<GLfloat> &color,
+                             std::vector<GLfloat> &normal,
+                             std::vector<GLfloat> &uv,
+                             std::vector<GLuint> &index) {
 
     glCreateBuffers(1, &bufferID);
     glBindBuffer(GL_ARRAY_BUFFER, bufferID);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof (GLfloat), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
 
     glGenBuffers(1, &colorBufferId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, colorBufferId);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, color.size() * sizeof (GLfloat), &color[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, color.size() * sizeof(GLfloat), &color[0], GL_STATIC_DRAW);
 
     glGenBuffers(1, &normalsBufferId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, normalsBufferId);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, normal.size() * sizeof (GLfloat), &normal[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, normal.size() * sizeof(GLfloat), &normal[0], GL_STATIC_DRAW);
 
     glGenBuffers(1, &uvBufferId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uvBufferId);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, uv.size() * sizeof (GLfloat), &uv[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, uv.size() * sizeof(GLfloat), &uv[0], GL_STATIC_DRAW);
 
 
     glGenBuffers(1, &bufferIndexID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndexID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size() * sizeof (GLuint), &index[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size() * sizeof(GLuint), &index[0], GL_STATIC_DRAW);
 
     indicesN = index.size();
 }
@@ -43,7 +43,7 @@ void MeshComponent::Active() {
             GL_FLOAT,
             GL_FALSE,
             0,
-            (void*)0
+            (void *) 0
     );
 
     glEnableVertexAttribArray(1);
@@ -54,7 +54,7 @@ void MeshComponent::Active() {
             GL_FLOAT,
             GL_FALSE,
             0,
-            (void*)0
+            (void *) 0
     );
 
     glEnableVertexAttribArray(2);
@@ -65,7 +65,7 @@ void MeshComponent::Active() {
             GL_FLOAT,
             GL_FALSE,
             0,
-            (void*)0
+            (void *) 0
     );
 
     glEnableVertexAttribArray(3);
@@ -76,7 +76,7 @@ void MeshComponent::Active() {
             GL_FLOAT,
             GL_FALSE,
             0,
-            (void*)0
+            (void *) 0
     );
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndexID);
@@ -104,6 +104,6 @@ void MeshComponent::Render() {
             GL_TRIANGLES,
             indicesN,
             GL_UNSIGNED_INT,
-            (void*)0
+            (void *) 0
     );
 }

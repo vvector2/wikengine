@@ -1,3 +1,6 @@
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include "../Src/Core/Engine.h"
 #include "../Src/Core/TransformComponent.h"
 #include "../Src/Core/CameraComponent.h"

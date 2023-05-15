@@ -16,12 +16,15 @@ struct RenderDebugData {
 
 class ImGuiDebugHelper {
 public:
-    explicit ImGuiDebugHelper(GLFWwindow* window);
+    explicit ImGuiDebugHelper(GLFWwindow *window);
+
     ~ImGuiDebugHelper();
+
     void Render();
+
     static RenderDebugData renderDebugData;
 private:
-    ImGuiIO* io;
+    ImGuiIO *io;
 };
 
 #endif //WIKENGINE_IMGUIDEBUGHELPER_H

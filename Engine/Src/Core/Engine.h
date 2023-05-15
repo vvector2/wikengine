@@ -14,21 +14,29 @@
 class Engine {
 public:
     Engine(GLint _initWidth, GLint _initHeight);
+
     void Setup();
-    void Run(Scene& scene);
+
+    void Run(Scene &scene);
+
     ~Engine();
+
 private:
-    GLFWwindow* window = nullptr;
-    ImGuiDebugHelper* imGuiDebugHelper = nullptr;
+    GLFWwindow *window = nullptr;
+    ImGuiDebugHelper *imGuiDebugHelper = nullptr;
     GLint initWidth;
     GLint initHeight;
     float deltaTime;
     float lastFrame;
     SimpleForwardRenderer renderer;
+
     void HandleDeltaTime();
-    static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-    void SetupEntity(Entity& entity);
-    void UpdateEntity(Entity& entity);
+
+    static void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+
+    void SetupEntity(Entity &entity);
+
+    void UpdateEntity(Entity &entity);
 };
 
 

@@ -7,7 +7,6 @@
 #include "Engine.h"
 #include "InputManager.h"
 #include "ScriptComponent.h"
-#include "Helpers/BasicCube.h"
 
 void Engine::Setup() {
     if (!glfwInit())
@@ -90,7 +89,7 @@ Engine::Engine(GLint _initWidth, GLint _initHeight) : initWidth(_initWidth), ini
 }
 
 void Engine::SetupEntity(Entity &entity) {
-    auto scriptComponent = entity.GetComponent<ScriptComponent>();
+    auto scriptComponent = entity.GetComponent<ScriptComponent>(ScriptComponentType);
     if (scriptComponent != nullptr)
         scriptComponent->Setup();
 
@@ -100,7 +99,7 @@ void Engine::SetupEntity(Entity &entity) {
 }
 
 void Engine::UpdateEntity(Entity &entity) {
-    auto scriptComponent = entity.GetComponent<ScriptComponent>();
+    auto scriptComponent = entity.GetComponent<ScriptComponent>(ScriptComponentType);
     if (scriptComponent != nullptr)
         scriptComponent->Update(deltaTime);
 

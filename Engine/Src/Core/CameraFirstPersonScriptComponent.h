@@ -9,14 +9,18 @@
 #include "ScriptComponent.h"
 #include "CameraFirstPerson.h"
 
-class CameraFirstPersonScriptComponent: public ScriptComponent {
+class CameraFirstPersonScriptComponent : public ScriptComponent {
 public:
-    explicit CameraFirstPersonScriptComponent(Entity& _entity);
+    explicit CameraFirstPersonScriptComponent(Entity &_entity);
+
     void Update(float deltaTime) override;
+
     void Setup() override;
+
     ~CameraFirstPersonScriptComponent();
+
 private:
-    CameraFirstPerson* cameraFirstPerson;
+    CameraFirstPerson *cameraFirstPerson;
     float lastY;
     float lastX;
     bool firstMouse;

@@ -8,9 +8,16 @@
 
 #include <string>
 
+enum ComponentsType {
+    TransformComponentType = 1, ScriptComponentType, MeshComponentType, MaterialComponentType, LightComponentType,
+    CameraComponentType
+};
+
 class IComponent {
 public:
-    virtual std::string GetComponentType() = 0;
+    virtual ComponentsType GetComponentType() = 0;
+
+    virtual ~IComponent() = default;
 };
 
 

@@ -1,8 +1,5 @@
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
 #include "Engine/Include/EngineCore.h"
-#include "glm/gtc/matrix_transform.hpp"
 #include "Engine/Src/Core/Helpers/BasicCube.h"
 
 int main(void) {
@@ -16,7 +13,7 @@ int main(void) {
     CameraFirstPersonScriptComponent cameraFirstPersonScriptComponent(entityCamera);
     entityCamera.AddUpdateComponent(cameraComponent);
     entityCamera.AddUpdateComponent(transformComponentCamera);
-    entityCamera.AddUpdateComponent<ScriptComponent>(cameraFirstPersonScriptComponent);
+    entityCamera.AddUpdateComponent(cameraFirstPersonScriptComponent);
 
     Entity lightEntity;
     TransformComponent transformLight;

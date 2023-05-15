@@ -10,13 +10,14 @@
 #include "IComponent.h"
 #include <glm/glm.hpp>
 
-const std::string TransformComponentTypeName = "TransformComponent";
-
-class TransformComponent: public IComponent {
+class TransformComponent : public IComponent {
 public:
-    std::string GetComponentType() override {return TransformComponentTypeName;}
-    glm::mat4  Matrix();
-    void  SetMatrix(glm::mat4 _mat);
+    ComponentsType GetComponentType() override { return TransformComponentType; }
+
+    glm::mat4 Matrix();
+
+    void SetMatrix(glm::mat4 _mat);
+
 private:
     glm::mat4 mat;
 };

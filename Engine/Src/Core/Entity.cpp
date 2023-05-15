@@ -5,9 +5,9 @@ Entity::Entity() {
     id = GenerateUUID();
 }
 
-std::vector<Entity*> Entity::GetChilds() {
-    std::vector<Entity*> result;
-    for (const auto &s : childs)
+std::vector<Entity *> Entity::GetChilds() {
+    std::vector<Entity *> result;
+    for (const auto &s: childs)
         result.push_back(s.second);
     return result;
 }
@@ -25,8 +25,8 @@ sole::uuid Entity::ID() const {
 }
 
 Entity::~Entity() {
-    for (const auto& child : childs)
+    for (const auto &child: childs)
         delete child.second;
-    for (const auto& component : components)
+    for (const auto &component: components)
         delete component.second;
 }

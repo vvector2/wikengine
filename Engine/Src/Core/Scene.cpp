@@ -4,7 +4,7 @@
 
 #include "Scene.h"
 
-void Scene::AddToScene(Entity& entity) {
+void Scene::AddToScene(Entity &entity) {
     head.AddChild(entity);
 }
 
@@ -12,7 +12,7 @@ void Scene::RemoveFromScene(sole::uuid id) {
     head.RemoveChild(id);
 }
 
-std::vector<Entity*> Scene::GetChilds() {
+std::vector<Entity *> Scene::GetChilds() {
     return head.GetChilds();
 }
 

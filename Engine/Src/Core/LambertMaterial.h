@@ -19,15 +19,13 @@ const std::string CameraMatrixUniformName = "cameraMatrix";
 const std::string WorldMatrixUniformName = "worldMatrix";
 const std::string directionalLightUniformName = "directionalLight";
 
-const std::string LambertMaterialMaterialTypeName = "LambertMaterial";
-
 class LambertMaterial : public IComponent {
 public:
-    std::string GetComponentType() override { return LambertMaterialMaterialTypeName; }
+    ComponentsType GetComponentType() override { return MaterialComponentType; }
 
     LambertMaterial();
 
-    ~LambertMaterial();
+    ~LambertMaterial() override;
 
     void SetTexture(Texture &_texture);
 

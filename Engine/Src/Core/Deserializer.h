@@ -8,7 +8,7 @@
 #include "Entity.h"
 #include "ShaderProgram.h"
 
-Entity* ReadFromObj(const std::string& path, ShaderProgram &shaderProgramBasictexture);
+Entity *ReadFromObj(const std::string &path, ShaderProgram &shaderProgramBasictexture);
 
 
 #endif //WIKENGINE_DESERIALIZER_H

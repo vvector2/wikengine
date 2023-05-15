@@ -13,15 +13,24 @@
 
 class InputManager {
 public:
-    static void mouseCallback(GLFWwindow* window, double xposIn, double yposIn);
-    static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-    static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+    static void mouseCallback(GLFWwindow *window, double xposIn, double yposIn);
+
+    static void scrollCallback(GLFWwindow *window, double xoffset, double yoffset);
+
+    static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
+
     static void Reset();
-    static float MouseX() { return mouseX;}
-    static float MouseY() { return mouseY;}
-    static float ScrollY() { return scrollY;}
-    static int KeyState(int key) { return keys[key];}
-    static int FirstMouse() { return firstMouse;}
+
+    static float MouseX() { return mouseX; }
+
+    static float MouseY() { return mouseY; }
+
+    static float ScrollY() { return scrollY; }
+
+    static int KeyState(int key) { return keys[key]; }
+
+    static int FirstMouse() { return firstMouse; }
+
 private:
     static bool firstMouse;
     static float mouseX;

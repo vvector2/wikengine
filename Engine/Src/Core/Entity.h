@@ -13,35 +13,37 @@
 class Entity {
 public:
     Entity();
-    std::vector<Entity*> GetChilds();
-    void AddChild(Entity& entity);
+
+    std::vector<Entity *> GetChilds();
+
+    void AddChild(Entity &entity);
+
     void RemoveChild(sole::uuid id);
 
-    template <class T>
-    T* GetComponent(){
-        return (T*)components[typeid(T).name()];
+    template<class T>
+    T *GetComponent(ComponentsType type) {
+        return (T *) components[type];
     }
 
-    template <class T>
-    void RemoveComponent() {
-        components.erase(typeid(T).name());
+    void RemoveComponent(ComponentsType type) {
+        components.erase(type);
     }
 
-    template <typename T>
-    void AddUpdateComponent(T &component) {
-        if (components.find(typeid(T).name()) != components.end())
+    void AddUpdateComponent(IComponent &component) {
+        if (components.find(component.GetComponentType()) != components.end())
             throw std::runtime_error("First Remove existing component");
 
-        components[typeid(T).name()] = &component;
+        components[component.GetComponentType()] = &component;
     }
 
     sole::uuid ID() const;
 
     ~Entity();
+
 private:
     sole::uuid id;
-    std::map<std::string , Entity*> childs;
-    std::unordered_map<std::string, IComponent*> components;
+    std::map<std::string, Entity *> childs;
+    std::unordered_map<ComponentsType, IComponent *> components;
 };
 
 

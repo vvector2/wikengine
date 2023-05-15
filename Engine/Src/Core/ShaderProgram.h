@@ -11,12 +11,17 @@
 
 class ShaderProgram {
 public:
-    ShaderProgram(std::string& vertexShader, std::string& fragmentShader);
-    inline GLuint GetShaderProgramId() const {return shaderProgramId;}
+    ShaderProgram(std::string &vertexShader, std::string &fragmentShader);
+
+    inline GLuint GetShaderProgramId() const { return shaderProgramId; }
+
     void Active();
+
     void Inactive();
+
 private:
-    GLuint LoadShader(std::string& shaderContent, GLenum shaderType);
+    GLuint LoadShader(std::string &shaderContent, GLenum shaderType);
+
     GLuint shaderProgramId;
 };
 

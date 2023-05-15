@@ -10,20 +10,24 @@
 #include "GL/glew.h"
 #include "IComponent.h"
 
-const std::string MeshComponentTypeName = "MeshComponent";
-
-class MeshComponent: public IComponent {
+class MeshComponent : public IComponent {
 public:
-    std::string GetComponentType() override {return MeshComponentTypeName;}
-    MeshComponent(std::vector<GLfloat>& vertices,
-                  std::vector<GLfloat>& color,
-                  std::vector<GLfloat>& normal,
-                  std::vector<GLfloat>& uv,
-                  std::vector<GLuint>& index);
+    ComponentsType GetComponentType() override { return MeshComponentType; }
+
+    MeshComponent(std::vector<GLfloat> &vertices,
+                  std::vector<GLfloat> &color,
+                  std::vector<GLfloat> &normal,
+                  std::vector<GLfloat> &uv,
+                  std::vector<GLuint> &index);
+
     void Active();
+
     void Render();
+
     void Inactive();
+
     ~MeshComponent();
+
 private:
     GLuint indicesN;
 

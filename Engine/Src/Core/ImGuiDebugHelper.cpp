@@ -9,11 +9,12 @@
 
 RenderDebugData ImGuiDebugHelper::renderDebugData;
 
-ImGuiDebugHelper::ImGuiDebugHelper(GLFWwindow* window){
+ImGuiDebugHelper::ImGuiDebugHelper(GLFWwindow *window) {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    io = &ImGui::GetIO(); (void)io;
+    io = &ImGui::GetIO();
+    (void) io;
     io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
@@ -33,8 +34,8 @@ void ImGuiDebugHelper::Render() {
 
     {
         ImGui::Begin("Debug");
-        ImGui::SetWindowPos(ImVec2(0,0));
-        ImGui::SetWindowSize(ImVec2(0,0));
+        ImGui::SetWindowPos(ImVec2(0, 0));
+        ImGui::SetWindowSize(ImVec2(0, 0));
 
         ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / io->Framerate, io->Framerate);
         ImGui::Text("Camera (%.1f, %.1f, %.1f)",

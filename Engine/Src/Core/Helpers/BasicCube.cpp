@@ -252,7 +252,7 @@ Entity *CreateBasicCube() {
     entity->AddUpdateComponent(*transformComponent);
     entity->AddUpdateComponent(*mesh);
     entity->AddUpdateComponent(*lambertMaterial);
-    entity->AddUpdateComponent<ScriptComponent>(*cubeScript);
+    entity->AddUpdateComponent(*cubeScript);
 
     return entity;
 }

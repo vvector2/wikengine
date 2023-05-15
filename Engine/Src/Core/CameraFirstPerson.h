@@ -14,17 +14,26 @@ const float DEFAULT_ZOOM = 45.0f;
 
 class CameraFirstPerson {
 public:
-    CameraFirstPerson(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
-                      float yaw = DEFAULT_YAW, float pitch = DEFAULT_PITCH);
+    explicit CameraFirstPerson(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),
+                               glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
+                               float yaw = DEFAULT_YAW, float pitch = DEFAULT_PITCH);
+
     std::string Debug() const;
+
     glm::mat4 GetViewMatrix();
+
     void ProcessKeyboard(glm::vec2 dir, float deltaTime);
+
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
+
     void ProcessMouseScroll(float yoffset);
 
-    glm::vec3 Pos() {return pos;}
-    inline float Zoom() const {return zoom;}
-    inline void SetZoom(float _zoom) {zoom = _zoom;}
+    glm::vec3 Pos() { return pos; }
+
+    inline float Zoom() const { return zoom; }
+
+    inline void SetZoom(float _zoom) { zoom = _zoom; }
+
 private:
     glm::vec3 pos;
     glm::vec3 front;

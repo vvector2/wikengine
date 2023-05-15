@@ -9,11 +9,9 @@
 #include "IComponent.h"
 #include "glm/vec3.hpp"
 
-const std::string DirectionaLightTypeName = "DirectionaLight";
-
 class DirectionaLight : public IComponent {
 public:
-    std::string GetComponentType() override { return DirectionaLightTypeName; }
+    ComponentsType GetComponentType() override { return LightComponentType; }
 
     glm::vec3 dir;
 };

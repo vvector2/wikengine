@@ -9,16 +9,18 @@
 #include "IComponent.h"
 #include "Entity.h"
 
-const std::string ScriptComponentTypeName = "ScriptComponent";
-
-class ScriptComponent: public IComponent {
+class ScriptComponent : public IComponent {
 public:
-    explicit ScriptComponent(Entity& _entity);
-    std::string GetComponentType() override {return ScriptComponentTypeName;}
+    explicit ScriptComponent(Entity &_entity);
+
+    ComponentsType GetComponentType() override { return ScriptComponentType; }
+
     virtual void Update(float deltaTime) = 0;
+
     virtual void Setup() = 0;
+
 protected:
-    Entity& entity;
+    Entity &entity;
 
 };
 
