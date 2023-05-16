@@ -10,5 +10,6 @@ uniform sampler2D textureSampler0;
 uniform int textureEnable;
 
 void main() {
-    colorOut = color * visibilityNormal;
+    vec3 MaterialDiffuseColor = texture(textureSampler0, uv).rgb;
+    colorOut = (MaterialDiffuseColor + color) * visibilityNormal;
 }

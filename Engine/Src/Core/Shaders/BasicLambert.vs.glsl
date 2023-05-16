@@ -18,7 +18,10 @@ void main() {
 
     color = vertexColor;
 
-    visibilityNormal = dot(normalize((worldMatrix * vec4(vertexNormal, 1)).xyz), -normalize(directionalLight));
+    mat4 rotationScaleWorldMatrix = mat4(worldMatrix);
+    rotationScaleWorldMatrix[3] = vec4(0, 0, 0, 1);
+
+    visibilityNormal = dot(normalize((rotationScaleWorldMatrix * vec4(vertexNormal, 1)).xyz), -normalize(directionalLight));
     visibilityNormal = visibilityNormal < 0.f ? 0.f : visibilityNormal;
 
     uv = vertexUV;

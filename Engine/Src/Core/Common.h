@@ -39,4 +39,6 @@ public:
     NotImplemented() : std::logic_error("Function not yet implemented") {};
 };
 
+GLfloat get_random();
+
 #endif //WIKENGINE_COMMON_H

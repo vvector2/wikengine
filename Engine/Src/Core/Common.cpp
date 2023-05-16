@@ -76,3 +76,9 @@ std::vector<GLfloat> ScaleVerticesToBoundingBox(glm::vec3 min, glm::vec3 max, st
               [scaleFactor](float x) { return x * scaleFactor; });
     return scaledVert;
 }
+
+GLfloat get_random() {
+    static std::default_random_engine e;
+    static std::uniform_real_distribution<> dis(0, 1); // range [0, 1)
+    return dis(e);
+}

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Engine/Include/EngineCore.h"
 #include "Engine/Src/Core/Helpers/BasicCube.h"
+#include "Engine/Src/Core/LambertMaterial.h"
 
 int main(void) {
     Engine engine(1280, 1024);
@@ -26,12 +27,36 @@ int main(void) {
     light.dir.z = 0;
     lightEntity.AddUpdateComponent(light);
 
-    auto cube = CreateBasicCube();
-
     Scene scene;
-    scene.AddToScene(*cube);
     scene.AddToScene(entityCamera);
     scene.AddToScene(lightEntity);
+
+    Texture texture("../kot.png");
+    texture.Load();
+    for (int i = 0; i < 1; i++) {
+        auto cube = CreateBasicCube();
+
+        auto transformComponent = cube->GetComponent<TransformComponent>(TransformComponentType);
+        auto matrixCube2 = transformComponent->Matrix();
+        matrixCube2 = translate(matrixCube2, glm::vec3(get_random() * 10, get_random() * 10, get_random() * 10));
+        //transformComponent->SetMatrix(matrixCube2);
+
+        if (get_random() > 0.5) {
+            auto lambertMaterial = cube->GetComponent<LambertMaterial>(MaterialComponentType);
+            lambertMaterial->SetTexture(texture);
+        }
+
+        scene.AddToScene(*cube);
+    }
+
+    auto plane = CreateBasicCube();
+    auto planeTransformComponent = plane->GetComponent<TransformComponent>(TransformComponentType);
+    auto planeMatrix = planeTransformComponent->Matrix();
+    planeMatrix = scale(planeMatrix, glm::vec3(3, 0.05, 3));
+    planeMatrix = translate(planeMatrix, glm::vec3(0, -40, 0));
+    planeTransformComponent->SetMatrix(planeMatrix);
+    plane->RemoveComponent(ScriptComponentType);
+    scene.AddToScene(*plane);
 
     //auto objEntity = ReadFromObj("../teapot.obj", shaderProgram);
     //auto objTransform = objEntity->GetComponent<TransformComponent>();
