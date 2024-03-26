@@ -13,6 +13,7 @@ LambertMaterial::LambertMaterial() {
     worldMatrixUniformId = glGetUniformLocation(shaderProgram->GetShaderProgramId(), WorldMatrixUniformName.c_str());
     directionalLightUniformId = glGetUniformLocation(shaderProgram->GetShaderProgramId(),
                                                      directionalLightUniformName.c_str());
+    enableLightUniformId = glGetUniformLocation(shaderProgram->GetShaderProgramId(), enableLightUniformName.c_str());
 }
 
 void LambertMaterial::SetTexture(Texture &_texture) {
@@ -26,12 +27,13 @@ void LambertMaterial::ClearTexture() {
     texture = nullptr;
 }
 
-void LambertMaterial::Active(glm::mat4 &cameraMatrix, glm::mat4 &worldMatrix, DirectionaLight &directionalLight) {
+void LambertMaterial::Active(glm::mat4 &cameraMatrix, glm::mat4 &worldMatrix, DirectionaLight &directionalLight, GLboolean enableLighting) {
     shaderProgram->Active();
 
     glUniform3f(directionalLightUniformId, directionalLight.dir.x, directionalLight.dir.y, directionalLight.dir.z);
     glUniformMatrix4fv(cameraMatrixUniformId, 1, GL_FALSE, &cameraMatrix[0][0]);
     glUniformMatrix4fv(worldMatrixUniformId, 1, GL_FALSE, &worldMatrix[0][0]);
+    glUniform1i(enableLightUniformId, enableLighting ? 1 : 0);
 
     if (texture != nullptr) {
         glUniform1i(textureEnableUniformId, 1);

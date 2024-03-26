@@ -2,6 +2,7 @@
 #include "Engine/Include/EngineCore.h"
 #include "Engine/Src/Core/Helpers/BasicCube.h"
 #include "Engine/Src/Core/LambertMaterial.h"
+#include <glm/gtx/string_cast.hpp>
 
 int main(void) {
     Engine engine(1280, 1024);
@@ -58,10 +59,15 @@ int main(void) {
     plane->RemoveComponent(ScriptComponentType);
     scene.AddToScene(*plane);
 
-    //auto objEntity = ReadFromObj("../teapot.obj", shaderProgram);
-    //auto objTransform = objEntity->GetComponent<TransformComponent>();
+    auto objEntity = ReadFromObj("../teapot.obj");
+    auto objTransform = objEntity->GetComponent<TransformComponent>(TransformComponentType);
     //objTransform->SetMatrix(rotate(objTransform->Matrix(), - glm::pi<float>() /2 , glm::vec3(1,0,0) ));
-    //scene.AddToScene(*objEntity);
+    objTransform->SetMatrix(translate(objTransform->Matrix(), glm::vec3(5 ,1 ,1)));
+
+    std::cout << glm::to_string(objTransform->Matrix()) << std::endl;
+    scene.AddToScene(*objEntity);
+
+
     //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
     engine.Run(scene);

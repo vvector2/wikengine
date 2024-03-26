@@ -9,6 +9,10 @@ MeshComponent::MeshComponent(std::vector<GLfloat> &vertices,
                              std::vector<GLfloat> &normal,
                              std::vector<GLfloat> &uv,
                              std::vector<GLuint> &index) {
+                                
+    normalExists = !normal.empty();
+    uvExists = !uv.empty();
+
 
     glCreateBuffers(1, &bufferID);
     glBindBuffer(GL_ARRAY_BUFFER, bufferID);
@@ -18,20 +22,24 @@ MeshComponent::MeshComponent(std::vector<GLfloat> &vertices,
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, colorBufferId);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, color.size() * sizeof(GLfloat), &color[0], GL_STATIC_DRAW);
 
-    glGenBuffers(1, &normalsBufferId);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, normalsBufferId);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, normal.size() * sizeof(GLfloat), &normal[0], GL_STATIC_DRAW);
+    if (normalExists) {
+        glGenBuffers(1, &normalsBufferId);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, normalsBufferId);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, normal.size() * sizeof(GLfloat), &normal[0], GL_STATIC_DRAW);
+    }
 
-    glGenBuffers(1, &uvBufferId);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uvBufferId);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, uv.size() * sizeof(GLfloat), &uv[0], GL_STATIC_DRAW);
-
+    if (uvExists) {
+        glGenBuffers(1, &uvBufferId);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uvBufferId);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, uv.size() * sizeof(GLfloat), &uv[0], GL_STATIC_DRAW);
+    }
 
     glGenBuffers(1, &bufferIndexID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndexID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size() * sizeof(GLuint), &index[0], GL_STATIC_DRAW);
 
     indicesN = index.size();
+
 }
 
 void MeshComponent::Active() {
@@ -57,27 +65,31 @@ void MeshComponent::Active() {
             (void *) 0
     );
 
-    glEnableVertexAttribArray(2);
-    glBindBuffer(GL_ARRAY_BUFFER, normalsBufferId);
-    glVertexAttribPointer(
-            2,
-            3,
-            GL_FLOAT,
-            GL_FALSE,
-            0,
-            (void *) 0
-    );
+    if (normalExists) {
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, normalsBufferId);
+        glVertexAttribPointer(
+                2,
+                3,
+                GL_FLOAT,
+                GL_FALSE,
+                0,
+                (void *) 0
+        );
+    }
 
-    glEnableVertexAttribArray(3);
-    glBindBuffer(GL_ARRAY_BUFFER, uvBufferId);
-    glVertexAttribPointer(
-            3,
-            2,
-            GL_FLOAT,
-            GL_FALSE,
-            0,
-            (void *) 0
-    );
+    if (uvExists) {
+        glEnableVertexAttribArray(3);
+        glBindBuffer(GL_ARRAY_BUFFER, uvBufferId);
+        glVertexAttribPointer(
+                3,
+                2,
+                GL_FLOAT,
+                GL_FALSE,
+                0,
+                (void *) 0
+        );
+    }
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndexID);
 }

@@ -8,6 +8,7 @@ layout (location = 3) in vec2 vertexUV;
 uniform mat4 cameraMatrix;
 uniform mat4 worldMatrix;
 uniform vec3 directionalLight;
+uniform bool enableLight;
 
 out vec3 color;
 out float visibilityNormal;
@@ -21,7 +22,7 @@ void main() {
     mat4 rotationScaleWorldMatrix = mat4(worldMatrix);
     rotationScaleWorldMatrix[3] = vec4(0, 0, 0, 1);
 
-    visibilityNormal = dot(normalize((rotationScaleWorldMatrix * vec4(vertexNormal, 1)).xyz), -normalize(directionalLight));
+    visibilityNormal = enableLight ? dot(normalize((rotationScaleWorldMatrix * vec4(vertexNormal, 1)).xyz), -normalize(directionalLight)) : 1.0f;
     visibilityNormal = visibilityNormal < 0.f ? 0.f : visibilityNormal;
 
     uv = vertexUV;

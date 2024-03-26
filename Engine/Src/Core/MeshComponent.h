@@ -28,6 +28,9 @@ public:
 
     ~MeshComponent();
 
+    GLboolean IsNormalExists() {return normalExists;}
+    GLboolean IsUVExists() {return uvExists;}
+
 private:
     GLuint indicesN;
 
@@ -36,6 +39,9 @@ private:
     GLuint bufferIndexID;
     GLuint uvBufferId;
     GLuint normalsBufferId;
+
+    GLboolean normalExists;
+    GLboolean uvExists;
 };
 
 

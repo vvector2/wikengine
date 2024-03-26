@@ -18,6 +18,7 @@ const std::string TextureEnableUniformName = "textureEnableUnifornName";
 const std::string CameraMatrixUniformName = "cameraMatrix";
 const std::string WorldMatrixUniformName = "worldMatrix";
 const std::string directionalLightUniformName = "directionalLight";
+const std::string enableLightUniformName = "enableLight";
 
 class LambertMaterial : public IComponent {
 public:
@@ -31,7 +32,7 @@ public:
 
     void ClearTexture();
 
-    void Active(glm::mat4 &cameraMatrix, glm::mat4 &worldMatrix, DirectionaLight &directionalLight);
+    void Active(glm::mat4 &cameraMatrix, glm::mat4 &worldMatrix, DirectionaLight &directionalLight, GLboolean enableLighting);
 
     void Inactive();
 
@@ -42,6 +43,7 @@ private:
     GLint cameraMatrixUniformId = -1;
     GLint directionalLightUniformId = -1;
     GLint worldMatrixUniformId = -1;
+    GLint enableLightUniformId = -1;
     Texture *texture = nullptr;
 };
 

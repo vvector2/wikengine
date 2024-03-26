@@ -15,7 +15,7 @@ public:
     void Render(Scene &scene);
 
 private:
-    void RenderEntity(Entity &entity, glm::mat4 &activeCameraProjection, DirectionaLight &directionalLight);
+    void RenderEntity(Entity &entity, glm::mat4 &activeCameraProjection, DirectionaLight &directionalLight, const glm::mat4 &fatherMatrix);
 
     glm::mat4 GetActiveCameraProjection(Scene &scene);
 

@@ -10,14 +10,15 @@ void SimpleForwardRenderer::Render(Scene &scene) {
     auto activeCameraProjection = GetActiveCameraProjection(scene);
     auto directionalLight = GetDirectionalLightFromScene(scene);
 
+    glm::mat4 mat;
     auto childs = scene.GetChilds();
     for (auto child: childs) {
-        RenderEntity(*child, activeCameraProjection, *directionalLight);
+        RenderEntity(*child, activeCameraProjection, *directionalLight, mat);
     }
 }
 
 void SimpleForwardRenderer::RenderEntity(Entity &entity, glm::mat4 &activeCameraProjection,
-                                         DirectionaLight &directionalLight) {
+                                         DirectionaLight &directionalLight, const glm::mat4 &fatherMatrix) {
     auto mesh = entity.GetComponent<MeshComponent>(MeshComponentType);
     auto transform = entity.GetComponent<TransformComponent>(TransformComponentType);
     auto lambertMaterial = entity.GetComponent<LambertMaterial>(MaterialComponentType);
@@ -25,7 +26,8 @@ void SimpleForwardRenderer::RenderEntity(Entity &entity, glm::mat4 &activeCamera
     if (mesh != nullptr && transform != nullptr && lambertMaterial != nullptr) {
 
         auto transformMatrix = transform->Matrix();
-        lambertMaterial->Active(activeCameraProjection, transformMatrix, directionalLight);
+        auto entityMatrix = fatherMatrix * transformMatrix;
+        lambertMaterial->Active(activeCameraProjection, entityMatrix ,directionalLight, mesh->IsNormalExists());
 
         mesh->Active();
         mesh->Render();
@@ -34,9 +36,10 @@ void SimpleForwardRenderer::RenderEntity(Entity &entity, glm::mat4 &activeCamera
         lambertMaterial->Inactive();
     }
 
-
-    for (auto child: entity.GetChilds()) {
-        RenderEntity(*child, activeCameraProjection, directionalLight);
+    if (transform != nullptr ) {
+        for (auto child: entity.GetChilds()) {
+            RenderEntity(*child, activeCameraProjection, directionalLight, transform->Matrix());
+        }
     }
 }
 

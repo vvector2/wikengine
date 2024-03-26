@@ -15,7 +15,7 @@
 #include "LambertMaterial.h"
 
 
-Entity *ProcessOneItem(const std::vector<tinyobj::index_t> &indices,
+Entity* ProcessOneItem(const std::vector<tinyobj::index_t> &indices,
                        const std::vector<tinyobj::real_t> &vert,
                        const std::vector<tinyobj::real_t> &normals,
                        const std::vector<tinyobj::real_t> &uv) {
@@ -26,17 +26,23 @@ Entity *ProcessOneItem(const std::vector<tinyobj::index_t> &indices,
     std::vector<GLfloat> shapeColors;
 
 
-    for (auto index: indices) {
+    for (const auto &index: indices) {
         shapeVertices.push_back(vert[index.vertex_index * 3]);
         shapeVertices.push_back(vert[index.vertex_index * 3 + 1]);
         shapeVertices.push_back(vert[index.vertex_index * 3 + 2]);
 
-        shapeUV.push_back(uv[index.texcoord_index * 2]);
-        shapeUV.push_back(uv[index.texcoord_index * 2 + 1]);
 
-        shapeNormals.push_back(normals[index.normal_index * 3]);
-        shapeNormals.push_back(normals[index.normal_index * 3 + 1]);
-        shapeNormals.push_back(normals[index.normal_index * 3 + 1]);
+        
+        if (index.texcoord_index != -1) {
+            shapeUV.push_back(uv[index.texcoord_index * 2]);
+            shapeUV.push_back(uv[index.texcoord_index * 2 + 1]);
+        }
+
+        if (index.normal_index != -1) {
+            shapeNormals.push_back(normals[index.normal_index * 3]);
+            shapeNormals.push_back(normals[index.normal_index * 3 + 1]);
+            shapeNormals.push_back(normals[index.normal_index * 3 + 1]);
+        }
 
         shapeColors.push_back(204.f);
         shapeColors.push_back(0);
@@ -57,7 +63,7 @@ Entity *ProcessOneItem(const std::vector<tinyobj::index_t> &indices,
 }
 
 
-Entity *ReadFromObj(const std::string &path, ShaderProgram &shaderProgramBasictexture) {
+Entity* ReadFromObj(const std::string &path) {
     std::vector<Entity *> result;
 
     tinyobj::ObjReader reader;

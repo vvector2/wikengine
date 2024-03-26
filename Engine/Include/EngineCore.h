@@ -9,3 +9,4 @@
 #include "../Src/Core/Entity.h"
 #include "../Src/Core/ScriptComponent.h"
 #include "../Src/Core/CameraFirstPersonScriptComponent.h"
+#include "../Src/Core/Deserializer.h"
