@@ -22,6 +22,22 @@ CameraFirstPersonScriptComponent::~CameraFirstPersonScriptComponent() {
 }
 
 void CameraFirstPersonScriptComponent::Update(float deltaTime) {
+    auto dirArrow = glm::vec2(0, 0);
+
+    if (InputManager::KeyState(GLFW_KEY_UP) != GLFW_RELEASE)
+        dirArrow.y = 1;
+
+    if (InputManager::KeyState(GLFW_KEY_DOWN) != GLFW_RELEASE)
+        dirArrow.y = -1;
+
+    if (InputManager::KeyState(GLFW_KEY_LEFT) != GLFW_RELEASE)
+        dirArrow.x = -1;
+
+    if (InputManager::KeyState(GLFW_KEY_RIGHT ) != GLFW_RELEASE)
+        dirArrow.x = 1;
+    
+    cameraFirstPerson->ProcessKeyboardArrow(dirArrow, deltaTime);
+
     auto dir = glm::vec2(0, 0);
 
     if (InputManager::KeyState(GLFW_KEY_W) != GLFW_RELEASE)

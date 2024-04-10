@@ -4,6 +4,7 @@ CameraFirstPerson::CameraFirstPerson(glm::vec3 position, glm::vec3 up,
                                      float yaw, float pitch) : front(glm::vec3(0.0f, 0.0f, -1.0f)),
                                                                movementSpeed(DEFAULT_SPEED),
                                                                mouseSensitivity(DEFAULT_SENSITIVITY),
+                                                               cameraRotationSpeed(DEFAULT_CAMERA_ROTATION_SPEED),
                                                                zoom(DEFAULT_ZOOM) {
     this->pos = position;
     this->worldUp = up;
@@ -26,6 +27,11 @@ glm::mat4 CameraFirstPerson::GetViewMatrix() {
 void CameraFirstPerson::ProcessKeyboard(glm::vec2 dir, float deltaTime) {
     float velocity = movementSpeed * deltaTime;
     pos += velocity * (front * dir.y + right * dir.x);
+}
+
+void CameraFirstPerson::ProcessKeyboardArrow(glm::vec2 dir, float deltaTime) {
+    float velocity = cameraRotationSpeed * deltaTime;
+    ProcessMouseMovement(dir.x * velocity, dir.y * velocity);
 }
 
 void CameraFirstPerson::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch) {

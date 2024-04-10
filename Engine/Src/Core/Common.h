@@ -41,4 +41,6 @@ public:
 
 GLfloat get_random();
 
+std::string GetFolderFromPath(const std::string &path);
+
 #endif //WIKENGINE_COMMON_H

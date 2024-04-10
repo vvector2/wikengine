@@ -18,7 +18,9 @@
 Entity* ProcessOneItem(const std::vector<tinyobj::index_t> &indices,
                        const std::vector<tinyobj::real_t> &vert,
                        const std::vector<tinyobj::real_t> &normals,
-                       const std::vector<tinyobj::real_t> &uv) {
+                       const std::vector<tinyobj::real_t> &uv,
+                       LambertMaterial &mat
+                       ) {
 
     std::vector<GLfloat> shapeVertices;
     std::vector<GLfloat> shapeUV;
@@ -44,22 +46,34 @@ Entity* ProcessOneItem(const std::vector<tinyobj::index_t> &indices,
             shapeNormals.push_back(normals[index.normal_index * 3 + 1]);
         }
 
-        shapeColors.push_back(204.f);
         shapeColors.push_back(0);
-        shapeColors.push_back(228);
+        shapeColors.push_back(0);
+        shapeColors.push_back(0);
     }
     auto shapeIndex = GetSequenceOfConsecutiveNumbers(indices.size());
 
     auto entity = new Entity();
     auto trans = new TransformComponent();
     auto mesh = new MeshComponent(shapeVertices, shapeColors, shapeNormals, shapeUV, shapeIndex);
-    auto mat = new LambertMaterial();
 
     entity->AddUpdateComponent(*trans);
     entity->AddUpdateComponent(*mesh);
-    entity->AddUpdateComponent(*mat);
+    entity->AddUpdateComponent(mat);
 
     return entity;
+}
+
+std::map<std::string, LambertMaterial*> ProcessAllMaterials(const std::vector<tinyobj::material_t> &materials, const std::string &path) {
+    std::map<std::string, LambertMaterial*> lambMaterial;
+    auto folderName = GetFolderFromPath(path);
+    for(const auto &mat : materials) {
+        auto lambertMaterial = new LambertMaterial();
+        auto texture = new Texture( folderName + "/" + mat.diffuse_texname);
+        texture->Load();
+        lambertMaterial->SetTexture(*texture);
+        lambMaterial.insert({mat.name, lambertMaterial});
+    }
+    return lambMaterial;
 }
 
 
@@ -68,7 +82,6 @@ Entity* ReadFromObj(const std::string &path) {
 
     tinyobj::ObjReader reader;
     tinyobj::ObjReaderConfig reader_config;
-    reader_config.mtl_search_path = "../";
 
     if (!reader.ParseFromFile(path, reader_config))
         if (!reader.Error().empty())
@@ -88,10 +101,14 @@ Entity* ReadFromObj(const std::string &path) {
     glm::vec3 max;
     CalcBox2d(vertices, min, max);
 
+
+    auto nameToLambertMerial = ProcessAllMaterials(materials, path);
     std::vector<GLfloat> scaledVert = ScaleVerticesToBoundingBox(min, max, vertices);
 
     for (const auto &shape: shapes) {
-        result.push_back(ProcessOneItem(shape.mesh.indices, scaledVert, attrib.normals, attrib.texcoords));
+        auto materialName = materials[shape.mesh.material_ids[0]].name;
+        auto mat = nameToLambertMerial[materialName];
+        result.push_back(ProcessOneItem(shape.mesh.indices, scaledVert, attrib.normals, attrib.texcoords, *mat));
     }
 
     auto fatherEntity = new Entity();

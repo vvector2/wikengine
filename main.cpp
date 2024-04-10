@@ -32,41 +32,8 @@ int main(void) {
     scene.AddToScene(entityCamera);
     scene.AddToScene(lightEntity);
 
-    Texture texture("../kot.png");
-    texture.Load();
-    for (int i = 0; i < 1; i++) {
-        auto cube = CreateBasicCube();
-
-        auto transformComponent = cube->GetComponent<TransformComponent>(TransformComponentType);
-        auto matrixCube2 = transformComponent->Matrix();
-        matrixCube2 = translate(matrixCube2, glm::vec3(get_random() * 10, get_random() * 10, get_random() * 10));
-        //transformComponent->SetMatrix(matrixCube2);
-
-        if (get_random() > 0.5) {
-            auto lambertMaterial = cube->GetComponent<LambertMaterial>(MaterialComponentType);
-            lambertMaterial->SetTexture(texture);
-        }
-
-        scene.AddToScene(*cube);
-    }
-
-    auto plane = CreateBasicCube();
-    auto planeTransformComponent = plane->GetComponent<TransformComponent>(TransformComponentType);
-    auto planeMatrix = planeTransformComponent->Matrix();
-    planeMatrix = scale(planeMatrix, glm::vec3(3, 0.05, 3));
-    planeMatrix = translate(planeMatrix, glm::vec3(0, -40, 0));
-    planeTransformComponent->SetMatrix(planeMatrix);
-    plane->RemoveComponent(ScriptComponentType);
-    scene.AddToScene(*plane);
-
-    auto objEntity = ReadFromObj("../teapot.obj");
-    auto objTransform = objEntity->GetComponent<TransformComponent>(TransformComponentType);
-    //objTransform->SetMatrix(rotate(objTransform->Matrix(), - glm::pi<float>() /2 , glm::vec3(1,0,0) ));
-    objTransform->SetMatrix(translate(objTransform->Matrix(), glm::vec3(5 ,1 ,1)));
-
-    std::cout << glm::to_string(objTransform->Matrix()) << std::endl;
-    scene.AddToScene(*objEntity);
-
+    auto objEntity2 = ReadFromObj("/home/wiktor/CLionProjects/wikengine/example/obj/css_assault/csAssult.obj");
+    scene.AddToScene(*objEntity2);
 
     //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 

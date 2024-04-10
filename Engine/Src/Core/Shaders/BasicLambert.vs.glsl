@@ -23,7 +23,6 @@ void main() {
     rotationScaleWorldMatrix[3] = vec4(0, 0, 0, 1);
 
     visibilityNormal = enableLight ? dot(normalize((rotationScaleWorldMatrix * vec4(vertexNormal, 1)).xyz), -normalize(directionalLight)) : 1.0f;
-    visibilityNormal = visibilityNormal < 0.f ? 0.f : visibilityNormal;
-
+    visibilityNormal = visibilityNormal < 0.1f ? 0.1f : visibilityNormal;
     uv = vertexUV;
 }

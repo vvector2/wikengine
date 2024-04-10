@@ -11,6 +11,7 @@ const float DEFAULT_PITCH = 0.0f;
 const float DEFAULT_SPEED = 1.0f;
 const float DEFAULT_SENSITIVITY = 0.05f;
 const float DEFAULT_ZOOM = 45.0f;
+const float DEFAULT_CAMERA_ROTATION_SPEED = 1000.0f;
 
 class CameraFirstPerson {
 public:
@@ -23,6 +24,8 @@ public:
     glm::mat4 GetViewMatrix();
 
     void ProcessKeyboard(glm::vec2 dir, float deltaTime);
+
+    void ProcessKeyboardArrow(glm::vec2 dir, float deltaTime);
 
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
 
@@ -44,6 +47,7 @@ private:
     float yaw;
     float pitch;
 
+    float cameraRotationSpeed;
     float movementSpeed;
     float mouseSensitivity;
 

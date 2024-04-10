@@ -82,3 +82,8 @@ GLfloat get_random() {
     static std::uniform_real_distribution<> dis(0, 1); // range [0, 1)
     return dis(e);
 }
+
+
+std::string GetFolderFromPath(const std::string &path) {
+    return path.substr(0, path.find_last_of("/"));
+}
