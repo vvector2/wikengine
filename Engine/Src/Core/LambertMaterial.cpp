@@ -27,7 +27,11 @@ void LambertMaterial::ClearTexture() {
     texture = nullptr;
 }
 
-void LambertMaterial::Active(glm::mat4 &cameraMatrix, glm::mat4 &worldMatrix, DirectionaLight &directionalLight, GLboolean enableLighting) {
+void LambertMaterial::Active(glm::mat4 &cameraMatrix, glm::mat4 &worldMatrix, DirectionaLight &directionalLight,
+                             GLboolean enableLighting) {
+    if (WireFrame)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
     shaderProgram->Active();
 
     glUniform3f(directionalLightUniformId, directionalLight.dir.x, directionalLight.dir.y, directionalLight.dir.z);
@@ -50,6 +54,7 @@ void LambertMaterial::Inactive() {
     shaderProgram->Inactive();
 
     glBindTexture(GL_TEXTURE_2D, 0);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 LambertMaterial::~LambertMaterial() {

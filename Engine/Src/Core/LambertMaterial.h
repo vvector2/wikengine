@@ -32,9 +32,12 @@ public:
 
     void ClearTexture();
 
-    void Active(glm::mat4 &cameraMatrix, glm::mat4 &worldMatrix, DirectionaLight &directionalLight, GLboolean enableLighting);
+    void Active(glm::mat4 &cameraMatrix, glm::mat4 &worldMatrix, DirectionaLight &directionalLight,
+                GLboolean enableLighting);
 
     void Inactive();
+
+    bool WireFrame = false;
 
 private:
     ShaderProgram *shaderProgram = nullptr;

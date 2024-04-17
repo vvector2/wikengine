@@ -8,6 +8,10 @@
 #include "InputManager.h"
 #include "ScriptComponent.h"
 
+reactphysics3d::PhysicsCommon Engine::physicsCommon;
+reactphysics3d::PhysicsWorld *Engine::physicsWorld;
+reactphysics3d::DebugRenderer *Engine::debugRenderer;
+
 void Engine::Setup() {
     if (!glfwInit())
         throw std::runtime_error("Failed to init glfw lib");
@@ -37,6 +41,10 @@ void Engine::Setup() {
     glDepthFunc(GL_LESS);
 
     imGuiDebugHelper = new ImGuiDebugHelper(window);
+
+    physicsWorld = Engine::physicsCommon.createPhysicsWorld();
+    physicsWorld->setIsDebugRenderingEnabled(true);
+    Engine::debugRenderer = &physicsWorld->getDebugRenderer();
 }
 
 void Engine::Run(Scene &scene) {
@@ -107,4 +115,5 @@ void Engine::UpdateEntity(Entity &entity) {
         UpdateEntity(*child);
     }
 }
+
 

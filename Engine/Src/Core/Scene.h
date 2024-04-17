@@ -8,6 +8,7 @@
 
 #include "Entity.h"
 #include "../../external/sole/sole.hpp"
+#include <reactphysics3d/reactphysics3d.h>
 
 class Scene {
 public:

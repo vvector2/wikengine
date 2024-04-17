@@ -13,14 +13,74 @@
 #include "MeshComponent.h"
 #include "Common.h"
 #include "LambertMaterial.h"
+#include "RigidbodyComponent.h"
+#include "Engine.h"
 
 
-Entity* ProcessOneItem(const std::vector<tinyobj::index_t> &indices,
-                       const std::vector<tinyobj::real_t> &vert,
-                       const std::vector<tinyobj::real_t> &normals,
-                       const std::vector<tinyobj::real_t> &uv,
-                       LambertMaterial &mat
-                       ) {
+void DeserializerObj::LoadFile(const std::string &path) {
+    if (!reader.ParseFromFile(path, reader_config))
+        if (!reader.Error().empty())
+            throw std::runtime_error("Failed to load obj: " + path);
+
+
+    if (!reader.Warning().empty())
+        std::cout << "TinyObjReader: " << reader.Warning() << std::endl;
+
+    _path = path;
+}
+
+Entity *DeserializerObj::CreateEntity(bool loadTexture, bool scaleVertices, bool addConvexCollider) {
+    if (scaleVertices)
+        processedVertices = scaleVerticesToBoundingBox1x1();
+    else
+        processedVertices = reader.GetAttrib().GetVertices();
+
+    if (loadTexture)
+        processMaterial();
+
+
+    std::vector<Entity *> result;
+    auto &shapes = reader.GetShapes();
+    for (const auto &shape: shapes) {
+        result.push_back(ProcessShape(shape));
+    }
+
+    auto fatherEntity = new Entity();
+    auto fatherTrans = new TransformComponent();
+    fatherEntity->AddUpdateComponent(*fatherTrans);
+
+    for (auto child: result)
+        fatherEntity->AddChild(*child);
+
+    return fatherEntity;
+}
+
+void DeserializerObj::processMaterial() {
+    auto folderName = GetFolderFromPath(_path);
+    auto materials = reader.GetMaterials();
+    for (const auto &mat: materials) {
+        auto lambertMaterial = new LambertMaterial();
+        auto texture = new Texture(folderName + "/" + mat.diffuse_texname);
+        texture->Load();
+        lambertMaterial->SetTexture(*texture);
+        nameToLambertMaterial.insert({mat.name, lambertMaterial});
+    }
+}
+
+std::vector<GLfloat> DeserializerObj::scaleVerticesToBoundingBox1x1() {
+    auto vertices = reader.GetAttrib().GetVertices();
+    glm::vec3 min;
+    glm::vec3 max;
+    CalcBox2d(vertices, min, max);
+    return ScaleVerticesToBoundingBox(min, max, vertices);
+}
+
+Entity *DeserializerObj::ProcessShape(const tinyobj::shape_t &shape) {
+    auto &attrib = reader.GetAttrib();
+    auto materials = reader.GetMaterials();
+    auto normals = attrib.normals;
+    auto uv = attrib.texcoords;
+    auto vert = processedVertices;
 
     std::vector<GLfloat> shapeVertices;
     std::vector<GLfloat> shapeUV;
@@ -28,13 +88,12 @@ Entity* ProcessOneItem(const std::vector<tinyobj::index_t> &indices,
     std::vector<GLfloat> shapeColors;
 
 
-    for (const auto &index: indices) {
+    for (const auto &index: shape.mesh.indices) {
         shapeVertices.push_back(vert[index.vertex_index * 3]);
         shapeVertices.push_back(vert[index.vertex_index * 3 + 1]);
         shapeVertices.push_back(vert[index.vertex_index * 3 + 2]);
 
 
-        
         if (index.texcoord_index != -1) {
             shapeUV.push_back(uv[index.texcoord_index * 2]);
             shapeUV.push_back(uv[index.texcoord_index * 2 + 1]);
@@ -50,73 +109,41 @@ Entity* ProcessOneItem(const std::vector<tinyobj::index_t> &indices,
         shapeColors.push_back(0);
         shapeColors.push_back(0);
     }
-    auto shapeIndex = GetSequenceOfConsecutiveNumbers(indices.size());
+    auto shapeIndex = GetSequenceOfConsecutiveNumbers(shape.mesh.indices.size());
 
     auto entity = new Entity();
     auto trans = new TransformComponent();
+    auto rigidBody = new RigidbodyComponent();
     auto mesh = new MeshComponent(shapeVertices, shapeColors, shapeNormals, shapeUV, shapeIndex);
+
+    auto materialName = materials[shape.mesh.material_ids[0]].name;
+    auto mat = nameToLambertMaterial.find(materialName) == nameToLambertMaterial.end() ? new LambertMaterial()
+                                                                                       : nameToLambertMaterial[materialName];
+
+    const reactphysics3d::TriangleVertexArray triangleVertexArray(shapeVertices.size() / 3,
+                                                                  shapeVertices.data(),
+                                                                  3 * sizeof(GLfloat),
+                                                                  shapeIndex.size() / 3,
+                                                                  shapeIndex.data(),
+                                                                  3 * sizeof(GLint),
+                                                                  reactphysics3d::TriangleVertexArray::VertexDataType::VERTEX_FLOAT_TYPE,
+                                                                  reactphysics3d::TriangleVertexArray::IndexDataType::INDEX_INTEGER_TYPE);
+    std::vector<rp3d::Message> messages;
+    reactphysics3d::TriangleMesh *triangleMesh = Engine::physicsCommon.createTriangleMesh(triangleVertexArray,
+                                                                                          messages);
+    for (const rp3d::Message &message: messages)
+        std::cout << "Message:" << message.text << std::endl;
+
+    const reactphysics3d::Vector3 scaling(1, 1, 1);
+    reactphysics3d::ConcaveMeshShape *concaveMeshShape = Engine::physicsCommon.createConcaveMeshShape(triangleMesh,
+                                                                                                      scaling);
+
+    rigidBody->AddCollider(concaveMeshShape);
 
     entity->AddUpdateComponent(*trans);
     entity->AddUpdateComponent(*mesh);
-    entity->AddUpdateComponent(mat);
+    entity->AddUpdateComponent(*mat);
+    entity->AddUpdateComponent(*rigidBody);
 
     return entity;
-}
-
-std::map<std::string, LambertMaterial*> ProcessAllMaterials(const std::vector<tinyobj::material_t> &materials, const std::string &path) {
-    std::map<std::string, LambertMaterial*> lambMaterial;
-    auto folderName = GetFolderFromPath(path);
-    for(const auto &mat : materials) {
-        auto lambertMaterial = new LambertMaterial();
-        auto texture = new Texture( folderName + "/" + mat.diffuse_texname);
-        texture->Load();
-        lambertMaterial->SetTexture(*texture);
-        lambMaterial.insert({mat.name, lambertMaterial});
-    }
-    return lambMaterial;
-}
-
-
-Entity* ReadFromObj(const std::string &path) {
-    std::vector<Entity *> result;
-
-    tinyobj::ObjReader reader;
-    tinyobj::ObjReaderConfig reader_config;
-
-    if (!reader.ParseFromFile(path, reader_config))
-        if (!reader.Error().empty())
-            throw std::runtime_error("Failed to load obj: " + path);
-
-
-    if (!reader.Warning().empty())
-        std::cout << "TinyObjReader: " << reader.Warning() << std::endl;
-
-
-    auto &attrib = reader.GetAttrib();
-    auto materials = reader.GetMaterials();
-    auto vertices = attrib.GetVertices();
-    auto &shapes = reader.GetShapes();
-
-    glm::vec3 min;
-    glm::vec3 max;
-    CalcBox2d(vertices, min, max);
-
-
-    auto nameToLambertMerial = ProcessAllMaterials(materials, path);
-    std::vector<GLfloat> scaledVert = ScaleVerticesToBoundingBox(min, max, vertices);
-
-    for (const auto &shape: shapes) {
-        auto materialName = materials[shape.mesh.material_ids[0]].name;
-        auto mat = nameToLambertMerial[materialName];
-        result.push_back(ProcessOneItem(shape.mesh.indices, scaledVert, attrib.normals, attrib.texcoords, *mat));
-    }
-
-    auto fatherEntity = new Entity();
-    auto fatherTrans = new TransformComponent();
-    fatherEntity->AddUpdateComponent(*fatherTrans);
-
-    for (auto child: result)
-        fatherEntity->AddChild(*child);
-
-    return fatherEntity;
 }

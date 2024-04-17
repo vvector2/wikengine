@@ -15,4 +15,3 @@ void Scene::RemoveFromScene(sole::uuid id) {
 std::vector<Entity *> Scene::GetChilds() {
     return head.GetChilds();
 }
-

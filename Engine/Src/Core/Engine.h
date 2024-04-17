@@ -10,6 +10,7 @@
 #include "GLFW/glfw3.h"
 #include "SimpleForwardRenderer.h"
 #include "ImGuiDebugHelper.h"
+#include <reactphysics3d/reactphysics3d.h>
 
 class Engine {
 public:
@@ -21,6 +22,10 @@ public:
 
     ~Engine();
 
+    static reactphysics3d::PhysicsCommon physicsCommon;
+    static reactphysics3d::PhysicsWorld *physicsWorld;
+    static reactphysics3d::DebugRenderer *debugRenderer;
+
 private:
     GLFWwindow *window = nullptr;
     ImGuiDebugHelper *imGuiDebugHelper = nullptr;
@@ -29,6 +34,8 @@ private:
     float deltaTime;
     float lastFrame;
     SimpleForwardRenderer renderer;
+    const float TimeStep = 1.0 / 60.0;
+    float accumulator = 0;
 
     void HandleDeltaTime();
 

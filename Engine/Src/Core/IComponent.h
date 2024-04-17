@@ -10,7 +10,7 @@
 
 enum ComponentsType {
     TransformComponentType = 1, ScriptComponentType, MeshComponentType, MaterialComponentType, LightComponentType,
-    CameraComponentType
+    CameraComponentType, RigidbodyComponentType, ColliderComponentType
 };
 
 class IComponent {

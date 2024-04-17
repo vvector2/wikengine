@@ -32,10 +32,10 @@ int main(void) {
     scene.AddToScene(entityCamera);
     scene.AddToScene(lightEntity);
 
-    auto objEntity2 = ReadFromObj("/home/wiktor/CLionProjects/wikengine/example/obj/css_assault/csAssult.obj");
+    DeserializerObj deserializerObj;
+    deserializerObj.LoadFile("/home/wiktor/CLionProjects/wikengine/example/obj/css_assault/csAssult.obj");
+    auto objEntity2 = deserializerObj.CreateEntity(true, true, true);
     scene.AddToScene(*objEntity2);
-
-    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
     engine.Run(scene);
 

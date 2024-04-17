@@ -23,7 +23,10 @@ add_executable(main
         ${PROJECT_SOURCE_DIR}/external/imgui/imstb_textedit.h
         ${PROJECT_SOURCE_DIR}/external/imgui/imstb_truetype.h
         ${ENGINE_SRC}
-        )
+        Engine/Src/Core/RigidbodyComponent.cpp
+        Engine/Src/Core/ColliderComponent.cpp
+        Engine/Src/Core/ColliderComponent.h
+)
 
 
 set_property(TARGET main PROPERTY CXX_STANDARD 11)
@@ -41,9 +44,19 @@ target_link_libraries(main PRIVATE glm)
 
 target_include_directories(main PRIVATE
         ${PROJECT_SOURCE_DIR}/external/imgui
-        )
+)
 
 IF (WIN32)
     set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT main)
 ENDIF ()
+
+find_package(ReactPhysics3D REQUIRED)
+
+if (WIN32)
+    list(APPEND CMAKE_PREFIX_PATH "C:\\Program Files (x86)\\ReactPhysics3D")
+elseif (APPLE)
+    list(APPEND CMAKE_PREFIX_PATH "/usr/local/lib/cmake/ReactPhysics3D")
+endif ()
+
+target_link_libraries(main PRIVATE ReactPhysics3D::ReactPhysics3D)
 
