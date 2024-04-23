@@ -39,6 +39,8 @@ public:
 
     bool WireFrame = false;
 
+    bool Disabled = false;
+
 private:
     ShaderProgram *shaderProgram = nullptr;
     GLint textureUniformId = -1;

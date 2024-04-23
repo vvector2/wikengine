@@ -34,7 +34,7 @@ void Engine::Setup() {
     glfwSetScrollCallback(window, InputManager::scrollCallback);
     glfwSetKeyCallback(window, InputManager::keyCallback);
 
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -45,32 +45,22 @@ void Engine::Setup() {
     physicsWorld = Engine::physicsCommon.createPhysicsWorld();
     physicsWorld->setIsDebugRenderingEnabled(true);
     Engine::debugRenderer = &physicsWorld->getDebugRenderer();
+    reactphysics3d::DefaultLogger *logger = physicsCommon.createDefaultLogger();
+    reactphysics3d::PhysicsCommon::setLogger(logger);
+    debugRenderer->setIsDebugItemDisplayed(reactphysics3d::DebugRenderer::DebugItem::COLLISION_SHAPE, true);
 }
 
 void Engine::Run(Scene &scene) {
-    for (auto child: scene.GetChilds())
-        SetupEntity(*child);
+    SetupEntities(scene);
 
     while (!glfwWindowShouldClose(window)) {
-        if (InputManager::KeyState(GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(window, true);
+        PollEvents();
 
-        HandleDeltaTime();
+        UpdatePhysicsWorld();
 
-        for (auto child: scene.GetChilds())
-            UpdateEntity(*child);
+        UpdateEntities(scene);
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.95, 0.95, 0.95, 1);
-
-        if (imGuiDebugHelper != nullptr) {
-            imGuiDebugHelper->Render();
-        }
-
-        renderer.Render(scene);
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        Render(scene);
     }
 }
 
@@ -83,12 +73,6 @@ Engine::~Engine() {
 
 void Engine::framebuffer_size_callback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height);
-}
-
-void Engine::HandleDeltaTime() {
-    auto currentFrame = static_cast<float>(glfwGetTime());
-    deltaTime = currentFrame - lastFrame;
-    lastFrame = currentFrame;
 }
 
 Engine::Engine(GLint _initWidth, GLint _initHeight) : initWidth(_initWidth), initHeight(_initHeight) {
@@ -114,6 +98,48 @@ void Engine::UpdateEntity(Entity &entity) {
     for (auto child: entity.GetChilds()) {
         UpdateEntity(*child);
     }
+}
+
+void Engine::UpdatePhysicsWorld() {
+    auto currentFrame = glfwGetTime();
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
+
+    accumulator += deltaTime;
+
+    while (accumulator >= TimeStep) {
+        physicsWorld->update(static_cast<float>(TimeStep));
+        accumulator -= TimeStep;
+    }
+
+}
+
+void Engine::Render(Scene &scene) {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.95, 0.95, 0.95, 1);
+
+    renderer.Render(scene);
+    if (imGuiDebugHelper != nullptr) {
+        imGuiDebugHelper->Render();
+    }
+
+    glfwSwapBuffers(window);
+}
+
+void Engine::PollEvents() {
+    glfwPollEvents();
+    if (InputManager::KeyState(GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
+void Engine::SetupEntities(Scene &scene) {
+    for (auto child: scene.GetChilds())
+        SetupEntity(*child);
+}
+
+void Engine::UpdateEntities(Scene &scene) {
+    for (auto child: scene.GetChilds())
+        UpdateEntity(*child);
 }
 
 

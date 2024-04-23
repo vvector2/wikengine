@@ -22,7 +22,10 @@ public:
 
     template<class T>
     T *GetComponent(ComponentsType type) {
-        return (T *) components[type];
+        if (components.find(type) == components.end())
+            return nullptr;
+        else
+            return (T *) components[type];
     }
 
     void RemoveComponent(ComponentsType type) {
@@ -43,7 +46,7 @@ public:
 private:
     sole::uuid id;
     std::map<std::string, Entity *> childs;
-    std::unordered_map<ComponentsType, IComponent *> components;
+    std::map<ComponentsType, IComponent *> components;
 };
 
 

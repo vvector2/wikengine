@@ -118,7 +118,7 @@ Entity *DeserializerObj::ProcessShape(const tinyobj::shape_t &shape) {
 
     auto materialName = materials[shape.mesh.material_ids[0]].name;
     auto mat = nameToLambertMaterial.find(materialName) == nameToLambertMaterial.end() ? new LambertMaterial()
-                                                                                       : nameToLambertMaterial[materialName];
+                                                                                       : nameToLambertMaterial[materialName]
 
     const reactphysics3d::TriangleVertexArray triangleVertexArray(shapeVertices.size() / 3,
                                                                   shapeVertices.data(),
@@ -138,7 +138,9 @@ Entity *DeserializerObj::ProcessShape(const tinyobj::shape_t &shape) {
     reactphysics3d::ConcaveMeshShape *concaveMeshShape = Engine::physicsCommon.createConcaveMeshShape(triangleMesh,
                                                                                                       scaling);
 
+
     rigidBody->AddCollider(concaveMeshShape);
+    rigidBody->SetBodyType(reactphysics3d::BodyType::STATIC);
 
     entity->AddUpdateComponent(*trans);
     entity->AddUpdateComponent(*mesh);

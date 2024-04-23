@@ -23,11 +23,11 @@ void SimpleForwardRenderer::RenderEntity(Entity &entity, glm::mat4 &activeCamera
     auto transform = entity.GetComponent<TransformComponent>(TransformComponentType);
     auto lambertMaterial = entity.GetComponent<LambertMaterial>(MaterialComponentType);
 
-    if (mesh != nullptr && transform != nullptr && lambertMaterial != nullptr) {
+    if (mesh != nullptr && transform != nullptr && lambertMaterial != nullptr && !lambertMaterial->Disabled) {
 
         auto transformMatrix = transform->Matrix();
         auto entityMatrix = fatherMatrix * transformMatrix;
-        lambertMaterial->Active(activeCameraProjection, entityMatrix ,directionalLight, mesh->IsNormalExists());
+        lambertMaterial->Active(activeCameraProjection, entityMatrix, directionalLight, mesh->IsNormalExists());
 
         mesh->Active();
         mesh->Render();
@@ -36,7 +36,7 @@ void SimpleForwardRenderer::RenderEntity(Entity &entity, glm::mat4 &activeCamera
         lambertMaterial->Inactive();
     }
 
-    if (transform != nullptr ) {
+    if (transform != nullptr) {
         for (auto child: entity.GetChilds()) {
             RenderEntity(*child, activeCameraProjection, directionalLight, transform->Matrix());
         }

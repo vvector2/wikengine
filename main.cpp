@@ -3,6 +3,7 @@
 #include "Engine/Src/Core/Helpers/BasicCube.h"
 #include "Engine/Src/Core/LambertMaterial.h"
 #include <glm/gtx/string_cast.hpp>
+#include "Engine/Src/Core/Helpers/DebugCollider.h"
 
 int main(void) {
     Engine engine(1280, 1024);
@@ -28,9 +29,13 @@ int main(void) {
     light.dir.z = 0;
     lightEntity.AddUpdateComponent(light);
 
+    auto debugCollider = DebugCollider::Create();
+
+
     Scene scene;
     scene.AddToScene(entityCamera);
     scene.AddToScene(lightEntity);
+    scene.AddToScene(*debugCollider);
 
     DeserializerObj deserializerObj;
     deserializerObj.LoadFile("/home/wiktor/CLionProjects/wikengine/example/obj/css_assault/csAssult.obj");

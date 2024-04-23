@@ -31,17 +31,25 @@ private:
     ImGuiDebugHelper *imGuiDebugHelper = nullptr;
     GLint initWidth;
     GLint initHeight;
-    float deltaTime;
-    float lastFrame;
     SimpleForwardRenderer renderer;
-    const float TimeStep = 1.0 / 60.0;
-    float accumulator = 0;
+    const double TimeStep = 1.0 / 60.0;
+    double accumulator = 0;
+    double deltaTime;
+    double lastFrame;
 
-    void HandleDeltaTime();
+    void UpdatePhysicsWorld();
+
+    void Render(Scene &scene);
+
+    void PollEvents();
 
     static void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
+    void SetupEntities(Scene &scene);
+
     void SetupEntity(Entity &entity);
+
+    void UpdateEntities(Scene &scene);
 
     void UpdateEntity(Entity &entity);
 };
