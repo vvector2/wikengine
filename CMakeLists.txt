@@ -23,9 +23,8 @@ add_executable(main
         ${PROJECT_SOURCE_DIR}/external/imgui/imstb_textedit.h
         ${PROJECT_SOURCE_DIR}/external/imgui/imstb_truetype.h
         ${ENGINE_SRC}
-        Engine/Src/Core/RigidbodyComponent.cpp
-        Engine/Src/Core/ColliderComponent.cpp
-        Engine/Src/Core/ColliderComponent.h
+        Engine/Src/Core/Helpers/DebugCollider.cpp
+        Engine/Src/Core/Helpers/DebugCollider.h
 )
 
 
