@@ -18,8 +18,14 @@ public:
 
     void SetMatrix(glm::mat4 _mat);
 
+    glm::mat4 WorldMatrix();
+
+protected:
+    glm::mat4 CalculateWorldMatrix(glm::mat4 mat, Entity *currentEntity);
+
 private:
     glm::mat4 mat;
+
 };
 
 

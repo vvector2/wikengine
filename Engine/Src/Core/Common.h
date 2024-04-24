@@ -43,4 +43,6 @@ GLfloat get_random();
 
 std::string GetFolderFromPath(const std::string &path);
 
+void printMat(glm::mat4 mat);
+
 #endif //WIKENGINE_COMMON_H

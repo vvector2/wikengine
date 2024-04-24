@@ -17,13 +17,8 @@ public:
 
     CameraComponent(float left, float right, float up, float down, float near, float far);
 
-    inline void SetActive(bool _active) { active = _active; };
-
-    inline bool IsActive() const { return active; };
-
     inline glm::mat4 Projection() { return projection; };
 private:
-    bool active = false;
     glm::mat4 projection;
 };
 

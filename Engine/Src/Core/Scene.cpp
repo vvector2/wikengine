@@ -15,3 +15,15 @@ void Scene::RemoveFromScene(sole::uuid id) {
 std::vector<Entity *> Scene::GetChilds() {
     return head.GetChilds();
 }
+
+void Scene::SetActiveCamera(Entity &entity) {
+    camera = &entity;
+}
+
+Entity *Scene::GetActiveCamera() {
+    return camera;
+}
+
+Scene::Scene() {
+    head.AddUpdateComponent(tranformComponent);
+}

@@ -44,16 +44,12 @@ void SimpleForwardRenderer::RenderEntity(Entity &entity, glm::mat4 &activeCamera
 }
 
 glm::mat4 SimpleForwardRenderer::GetActiveCameraProjection(Scene &scene) {
-    auto childs = scene.GetChilds();
-    auto cameras = Filter<Entity *>(scene.GetChilds(), [](Entity *entity) {
-                                        auto camera = entity->GetComponent<CameraComponent>(CameraComponentType);
-                                        return camera != nullptr && camera->IsActive();
-                                    }
-    );
-    if (!cameras.empty()) {
-        auto camera = cameras[0]->GetComponent<CameraComponent>(CameraComponentType);
-        auto cameraTransform = cameras[0]->GetComponent<TransformComponent>(TransformComponentType);
-        auto activeCameraProjection = camera->Projection() * cameraTransform->Matrix();
+    auto cameraEntity = scene.GetActiveCamera();
+
+    if (cameraEntity != nullptr) {
+        auto camera = cameraEntity->GetComponent<CameraComponent>(CameraComponentType);
+        auto cameraTransform = cameraEntity->GetComponent<TransformComponent>(TransformComponentType);
+        auto activeCameraProjection = camera->Projection() * cameraTransform->WorldMatrix();
         return activeCameraProjection;
     } else
         throw std::runtime_error("No active camera on scene");

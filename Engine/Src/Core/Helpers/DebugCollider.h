@@ -15,15 +15,14 @@
 
 class DebugCollider : public ScriptComponent {
 public:
-    explicit DebugCollider(Entity &entity);
 
     void Setup() override {
-        auto lambert = entity.GetComponent<LambertMaterial>(MaterialComponentType);
+        auto lambert = _entity->GetComponent<LambertMaterial>(MaterialComponentType);
         lambert->WireFrame = true;
     }
 
     void Update(float deltaTime) override {
-        auto mesh = entity.GetComponent<MeshComponent>(MeshComponentType);
+        auto mesh = _entity->GetComponent<MeshComponent>(MeshComponentType);
         if (mesh != nullptr) {
             return;
         } else {
@@ -64,14 +63,14 @@ public:
             index = GetSequenceOfConsecutiveNumbers(triangles.size() * 3);
 
             auto newMesh = new MeshComponent(vertices, color, normal, uv, index);
-            entity.AddUpdateComponent(*newMesh);
+            _entity->AddUpdateComponent(*newMesh);
         }
     }
 
     static Entity *Create() {
         auto entity = new Entity();
         auto mat = new LambertMaterial();
-        auto debugColliderScriptComponent = new DebugCollider(*entity);
+        auto debugColliderScriptComponent = new DebugCollider();
         auto tranform = new TransformComponent();
         entity->AddUpdateComponent(*mat);
         entity->AddUpdateComponent(*debugColliderScriptComponent);

@@ -10,7 +10,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 void CameraFirstPersonScriptComponent::Setup() {
-    auto transform = entity.GetComponent<TransformComponent>(TransformComponentType);
+    auto transform = _entity->GetComponent<TransformComponent>(TransformComponentType);
     auto mat = transform->Matrix();
     auto baseY = glm::vec3(mat[0][1], mat[1][1], mat[2][1]);
     std::cout << glm::to_string(baseY) << std::endl;
@@ -33,9 +33,9 @@ void CameraFirstPersonScriptComponent::Update(float deltaTime) {
     if (InputManager::KeyState(GLFW_KEY_LEFT) != GLFW_RELEASE)
         dirArrow.x = -1;
 
-    if (InputManager::KeyState(GLFW_KEY_RIGHT ) != GLFW_RELEASE)
+    if (InputManager::KeyState(GLFW_KEY_RIGHT) != GLFW_RELEASE)
         dirArrow.x = 1;
-    
+
     cameraFirstPerson->ProcessKeyboardArrow(dirArrow, deltaTime);
 
     auto dir = glm::vec2(0, 0);
@@ -69,7 +69,7 @@ void CameraFirstPersonScriptComponent::Update(float deltaTime) {
 
     cameraFirstPerson->ProcessMouseMovement(xoffset, yoffset);
 
-    auto tranform = entity.GetComponent<TransformComponent>(TransformComponentType);
+    auto tranform = _entity->GetComponent<TransformComponent>(TransformComponentType);
     tranform->SetMatrix(cameraFirstPerson->GetViewMatrix());
 
     ImGuiDebugHelper::renderDebugData.activeCamePosition = glm::vec3(cameraFirstPerson->Pos().x,
@@ -77,6 +77,5 @@ void CameraFirstPersonScriptComponent::Update(float deltaTime) {
                                                                      cameraFirstPerson->Pos().z);
 }
 
-CameraFirstPersonScriptComponent::CameraFirstPersonScriptComponent(Entity &_entity) : ScriptComponent(_entity) {
-
+CameraFirstPersonScriptComponent::CameraFirstPersonScriptComponent() {
 }

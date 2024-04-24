@@ -64,6 +64,7 @@ void DeserializerObj::processMaterial() {
         texture->Load();
         lambertMaterial->SetTexture(*texture);
         nameToLambertMaterial.insert({mat.name, lambertMaterial});
+        return;
     }
 }
 

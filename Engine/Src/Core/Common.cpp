@@ -1,4 +1,6 @@
 #include "Common.h"
+#include <glm/gtx/string_cast.hpp>
+#include "iostream"
 
 std::string ReadFile(const std::string &path) {
     std::string result;
@@ -86,4 +88,8 @@ GLfloat get_random() {
 
 std::string GetFolderFromPath(const std::string &path) {
     return path.substr(0, path.find_last_of("/"));
+}
+
+void printMat(glm::mat4 mat) {
+    std::cout << glm::to_string(mat) << std::endl;
 }

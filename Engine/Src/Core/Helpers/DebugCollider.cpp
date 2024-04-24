@@ -4,6 +4,3 @@
 
 #include "DebugCollider.h"
 
-DebugCollider::DebugCollider(Entity &entity) : ScriptComponent(entity) {
-
-}

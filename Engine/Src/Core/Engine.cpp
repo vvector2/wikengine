@@ -91,6 +91,17 @@ void Engine::SetupEntity(Entity &entity) {
 }
 
 void Engine::UpdateEntity(Entity &entity) {
+//    auto rigidBodyComponent = entity.GetComponent<ScriptComponent>(ScriptComponentType);
+//    auto tranform = entity.GetComponent<TransformComponent>(TransformComponentType);
+//
+//    decimal factor = accumulator / TimeStep;
+//
+//// Get the updated transform of the body
+//    Transform currTransform = body->getTransform();
+//
+//// Compute the interpolated transform of the rigid body
+//    Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform, currTransform, factor);
+
     auto scriptComponent = entity.GetComponent<ScriptComponent>(ScriptComponentType);
     if (scriptComponent != nullptr)
         scriptComponent->Update(deltaTime);

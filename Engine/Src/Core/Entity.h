@@ -29,7 +29,13 @@ public:
     }
 
     void RemoveComponent(ComponentsType type) {
+        auto component = components.find(type);
+        if (component != components.end())
+            throw std::runtime_error("First Remove existing component");
+
         components.erase(type);
+
+        component->second->SetCurrentEntity(nullptr);
     }
 
     void AddUpdateComponent(IComponent &component) {
@@ -37,7 +43,13 @@ public:
             throw std::runtime_error("First Remove existing component");
 
         components[component.GetComponentType()] = &component;
+
+        component.SetCurrentEntity(this);
     }
+
+    void SetFather(Entity *father);
+
+    Entity *GetFather();
 
     sole::uuid ID() const;
 
@@ -45,6 +57,7 @@ public:
 
 private:
     sole::uuid id;
+    Entity *_father = nullptr;
     std::map<std::string, Entity *> childs;
     std::map<ComponentsType, IComponent *> components;
 };

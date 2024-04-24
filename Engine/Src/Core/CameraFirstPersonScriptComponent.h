@@ -11,7 +11,7 @@
 
 class CameraFirstPersonScriptComponent : public ScriptComponent {
 public:
-    explicit CameraFirstPersonScriptComponent(Entity &_entity);
+    explicit CameraFirstPersonScriptComponent();
 
     void Update(float deltaTime) override;
 

@@ -11,17 +11,13 @@
 
 class ScriptComponent : public IComponent {
 public:
-    explicit ScriptComponent(Entity &_entity);
+    explicit ScriptComponent();
 
     ComponentsType GetComponentType() override { return ScriptComponentType; }
 
     virtual void Update(float deltaTime) = 0;
 
     virtual void Setup() = 0;
-
-protected:
-    Entity &entity;
-
 };
 
 

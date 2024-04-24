@@ -5,6 +5,7 @@
 #ifndef WIKENGINE_ICOMPONENT_H
 #define WIKENGINE_ICOMPONENT_H
 
+class Entity;
 
 #include <string>
 
@@ -18,6 +19,13 @@ public:
     virtual ComponentsType GetComponentType() = 0;
 
     virtual ~IComponent() = default;
+
+    void SetCurrentEntity(Entity *entity) { _entity = entity; }
+
+protected:
+
+    Entity *_entity = nullptr;
+
 };
 
 

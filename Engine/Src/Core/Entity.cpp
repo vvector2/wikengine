@@ -13,6 +13,7 @@ std::vector<Entity *> Entity::GetChilds() {
 }
 
 void Entity::AddChild(Entity &entity) {
+    entity.SetFather(this);
     childs[entity.ID().str()] = &entity;
 }
 
@@ -29,4 +30,12 @@ Entity::~Entity() {
         delete child.second;
     for (const auto &component: components)
         delete component.second;
+}
+
+void Entity::SetFather(Entity *father) {
+    this->_father = father;
+}
+
+Entity *Entity::GetFather() {
+    return _father;
 }

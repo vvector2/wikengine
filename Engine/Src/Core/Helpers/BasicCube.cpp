@@ -248,7 +248,7 @@ Entity *CreateBasicCube() {
     auto lambertMaterial = new LambertMaterial();
 
     auto entity = new Entity();
-    auto cubeScript = new CubeScript(*entity);
+    auto cubeScript = new CubeScript();
     entity->AddUpdateComponent(*transformComponent);
     entity->AddUpdateComponent(*mesh);
     entity->AddUpdateComponent(*lambertMaterial);
@@ -257,6 +257,3 @@ Entity *CreateBasicCube() {
     return entity;
 }
 
-CubeScript::CubeScript(Entity &entity) : ScriptComponent(entity) {
-
-}

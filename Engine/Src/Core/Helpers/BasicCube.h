@@ -14,10 +14,8 @@
 
 class CubeScript : public ScriptComponent {
 public:
-    explicit CubeScript(Entity &entity);
-
     void Update(float deltaTime) override {
-        auto tranform = entity.GetComponent<TransformComponent>(TransformComponentType);
+        auto tranform = _entity->GetComponent<TransformComponent>(TransformComponentType);
         auto mat = tranform->Matrix();
         tranform->SetMatrix(glm::rotate(tranform->Matrix(), (float) glm::radians(1.0), glm::vec3(1.0, 1, 1)));
     }

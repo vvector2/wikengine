@@ -10,3 +10,5 @@
 #include "../Src/Core/ScriptComponent.h"
 #include "../Src/Core/CameraFirstPersonScriptComponent.h"
 #include "../Src/Core/Deserializer.h"
+#include "../Src/Core/RigidbodyComponent.h"
+#include "../Src/Core/Helpers/DebugCollider.h"
