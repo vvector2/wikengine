@@ -9,12 +9,12 @@ MeshComponent::MeshComponent(std::vector<GLfloat> &vertices,
                              std::vector<GLfloat> &normal,
                              std::vector<GLfloat> &uv,
                              std::vector<GLuint> &index) {
-                                
+
     normalExists = !normal.empty();
     uvExists = !uv.empty();
 
 
-    glCreateBuffers(1, &bufferID);
+    glGenBuffers(1, &bufferID);
     glBindBuffer(GL_ARRAY_BUFFER, bufferID);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
 
@@ -118,4 +118,32 @@ void MeshComponent::Render() {
             GL_UNSIGNED_INT,
             (void *) 0
     );
+}
+
+void MeshComponent::Update(std::vector<GLfloat> &vertices, std::vector<GLfloat> &color, std::vector<GLfloat> &normal,
+                           std::vector<GLfloat> &uv, std::vector<GLuint> &index) {
+
+    normalExists = !normal.empty();
+    uvExists = !uv.empty();
+
+    glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, colorBufferId);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, color.size() * sizeof(GLfloat), &color[0], GL_STATIC_DRAW);
+
+    if (normalExists) {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, normalsBufferId);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, normal.size() * sizeof(GLfloat), &normal[0], GL_STATIC_DRAW);
+    }
+
+    if (uvExists) {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uvBufferId);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, uv.size() * sizeof(GLfloat), &uv[0], GL_STATIC_DRAW);
+    }
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndexID);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size() * sizeof(GLuint), &index[0], GL_STATIC_DRAW);
+
+    indicesN = index.size();
 }

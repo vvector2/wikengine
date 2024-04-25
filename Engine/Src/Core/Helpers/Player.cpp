@@ -39,7 +39,7 @@ void Player::Update(float deltaTime) {
 //    cameraFirstPerson->ProcessMouseMovement(xoffset, yoffset);
 
     auto tranform = _entity->GetComponent<TransformComponent>(TransformComponentType);
-    tranform->SetMatrix(cameraFirstPerson->GetViewMatrix());
+    //tranform->SetMatrix(cameraFirstPerson->GetViewMatrix());
 }
 
 void Player::Setup() {

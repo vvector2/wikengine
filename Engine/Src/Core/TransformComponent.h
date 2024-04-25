@@ -16,7 +16,7 @@ public:
 
     glm::mat4 Matrix();
 
-    void SetMatrix(glm::mat4 _mat);
+    void SetMatrix(glm::mat4 _mat, bool updateRigidBody = true);
 
     glm::mat4 WorldMatrix();
 

@@ -26,3 +26,11 @@ reactphysics3d::Collider *RigidbodyComponent::AddCollider(reactphysics3d::Collis
 void RigidbodyComponent::SetBodyType(const reactphysics3d::BodyType &value) {
     rigidBody->setType(value);
 }
+
+reactphysics3d::Transform RigidbodyComponent::GetTransform() {
+    return rigidBody->getTransform();
+}
+
+void RigidbodyComponent::SetTransform(reactphysics3d::Transform transform) {
+    rigidBody->setTransform(transform);
+}

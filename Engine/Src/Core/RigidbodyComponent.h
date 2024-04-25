@@ -10,7 +10,7 @@
 
 class RigidbodyComponent : public IComponent {
 public:
-    ComponentsType GetComponentType() override { return ColliderComponentType; }
+    ComponentsType GetComponentType() override { return RigidbodyComponentType; }
 
     RigidbodyComponent();
 
@@ -19,6 +19,10 @@ public:
     reactphysics3d::Collider *AddCollider(reactphysics3d::CollisionShape *shape);
 
     void SetBodyType(const reactphysics3d::BodyType &value);
+
+    reactphysics3d::Transform GetTransform();
+
+    void SetTransform(reactphysics3d::Transform transform);
 
 private:
     reactphysics3d::RigidBody *rigidBody;

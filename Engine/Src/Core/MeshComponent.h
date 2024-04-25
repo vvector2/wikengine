@@ -26,10 +26,17 @@ public:
 
     void Inactive();
 
+    void Update(std::vector<GLfloat> &vertices,
+                std::vector<GLfloat> &color,
+                std::vector<GLfloat> &normal,
+                std::vector<GLfloat> &uv,
+                std::vector<GLuint> &index);
+
     ~MeshComponent();
 
-    GLboolean IsNormalExists() {return normalExists;}
-    GLboolean IsUVExists() {return uvExists;}
+    GLboolean IsNormalExists() { return normalExists; }
+
+    GLboolean IsUVExists() { return uvExists; }
 
 private:
     GLuint indicesN;

@@ -13,6 +13,7 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <reactphysics3d/reactphysics3d.h>
 
 
 std::string ReadFile(const std::string &path);
@@ -45,4 +46,9 @@ std::string GetFolderFromPath(const std::string &path);
 
 void printMat(glm::mat4 mat);
 
+glm::mat4 ReactTransformToMat(reactphysics3d::Transform transform);
+
+reactphysics3d::Transform MatToReactTransform(glm::mat4 mat);
+
 #endif //WIKENGINE_COMMON_H
+

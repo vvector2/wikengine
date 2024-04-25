@@ -1,6 +1,7 @@
 #include "Common.h"
 #include <glm/gtx/string_cast.hpp>
 #include "iostream"
+#include <glm/gtc/type_ptr.hpp>
 
 std::string ReadFile(const std::string &path) {
     std::string result;
@@ -92,4 +93,17 @@ std::string GetFolderFromPath(const std::string &path) {
 
 void printMat(glm::mat4 mat) {
     std::cout << glm::to_string(mat) << std::endl;
+}
+
+glm::mat4 ReactTransformToMat(reactphysics3d::Transform transform) {
+    GLfloat interpolatedTransformArray[16];
+    transform.getOpenGLMatrix(interpolatedTransformArray);
+    glm::mat4 interpolatedTransformMat = glm::make_mat4(interpolatedTransformArray);
+    return interpolatedTransformMat;
+}
+
+reactphysics3d::Transform MatToReactTransform(glm::mat4 mat) {
+    auto transform = reactphysics3d::Transform();
+    transform.setFromOpenGL(&mat[0][0]);
+    return transform;
 }

@@ -11,7 +11,7 @@ class Entity;
 
 enum ComponentsType {
     TransformComponentType = 1, ScriptComponentType, MeshComponentType, MaterialComponentType, LightComponentType,
-    CameraComponentType, RigidbodyComponentType, ColliderComponentType
+    CameraComponentType, RigidbodyComponentType
 };
 
 class IComponent {

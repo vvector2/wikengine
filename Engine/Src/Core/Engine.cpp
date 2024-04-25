@@ -7,6 +7,8 @@
 #include "Engine.h"
 #include "InputManager.h"
 #include "ScriptComponent.h"
+#include "RigidbodyComponent.h"
+#include "Common.h"
 
 reactphysics3d::PhysicsCommon Engine::physicsCommon;
 reactphysics3d::PhysicsWorld *Engine::physicsWorld;
@@ -42,7 +44,9 @@ void Engine::Setup() {
 
     imGuiDebugHelper = new ImGuiDebugHelper(window);
 
-    physicsWorld = Engine::physicsCommon.createPhysicsWorld();
+    reactphysics3d::PhysicsWorld::WorldSettings settings;
+    settings.gravity = reactphysics3d::Vector3(0, -0.05, 0);
+    physicsWorld = Engine::physicsCommon.createPhysicsWorld(settings);
     physicsWorld->setIsDebugRenderingEnabled(true);
     Engine::debugRenderer = &physicsWorld->getDebugRenderer();
     reactphysics3d::DefaultLogger *logger = physicsCommon.createDefaultLogger();
@@ -91,16 +95,25 @@ void Engine::SetupEntity(Entity &entity) {
 }
 
 void Engine::UpdateEntity(Entity &entity) {
-//    auto rigidBodyComponent = entity.GetComponent<ScriptComponent>(ScriptComponentType);
-//    auto tranform = entity.GetComponent<TransformComponent>(TransformComponentType);
-//
-//    decimal factor = accumulator / TimeStep;
-//
-//// Get the updated transform of the body
-//    Transform currTransform = body->getTransform();
-//
-//// Compute the interpolated transform of the rigid body
-//    Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform, currTransform, factor);
+    auto rigidBodyComponent = entity.GetComponent<RigidbodyComponent>(RigidbodyComponentType);
+    auto tranform = entity.GetComponent<TransformComponent>(TransformComponentType);
+
+    if (rigidBodyComponent != nullptr) {
+        auto factor = accumulator / TimeStep;
+
+        auto prevTransform = MatToReactTransform(tranform->WorldMatrix());
+        auto currTransform = rigidBodyComponent->GetTransform();
+
+        auto interpolatedTransform = reactphysics3d::Transform::interpolateTransforms(prevTransform, currTransform,
+                                                                                      factor);
+
+
+        auto interpolatedMatrix = ReactTransformToMat(interpolatedTransform);
+
+        std::cout << prevTransform.to_string() << std::endl;
+        tranform->SetMatrix(interpolatedMatrix, false);
+    }
+
 
     auto scriptComponent = entity.GetComponent<ScriptComponent>(ScriptComponentType);
     if (scriptComponent != nullptr)
