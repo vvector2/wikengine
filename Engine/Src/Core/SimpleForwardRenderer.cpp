@@ -5,6 +5,7 @@
 #include "Common.h"
 #include "CameraComponent.h"
 #include "LambertMaterial.h"
+#include "glm/gtc/matrix_transform.hpp"
 
 void SimpleForwardRenderer::Render(Scene &scene) {
     auto activeCameraProjection = GetActiveCameraProjection(scene);
@@ -48,8 +49,7 @@ glm::mat4 SimpleForwardRenderer::GetActiveCameraProjection(Scene &scene) {
 
     if (cameraEntity != nullptr) {
         auto camera = cameraEntity->GetComponent<CameraComponent>(CameraComponentType);
-        auto cameraTransform = cameraEntity->GetComponent<TransformComponent>(TransformComponentType);
-        auto activeCameraProjection = camera->Projection() * cameraTransform->WorldMatrix();
+        auto activeCameraProjection = camera->Projection() * camera->View();
         return activeCameraProjection;
     } else
         throw std::runtime_error("No active camera on scene");

@@ -16,13 +16,7 @@ public:
 
     ~RigidbodyComponent() override;
 
-    reactphysics3d::Collider *AddCollider(reactphysics3d::CollisionShape *shape);
-
-    void SetBodyType(const reactphysics3d::BodyType &value);
-
-    reactphysics3d::Transform GetTransform();
-
-    void SetTransform(reactphysics3d::Transform transform);
+    reactphysics3d::RigidBody *GetRigidBody() { return rigidBody; }
 
 private:
     reactphysics3d::RigidBody *rigidBody;

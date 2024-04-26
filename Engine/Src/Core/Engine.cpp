@@ -98,19 +98,18 @@ void Engine::UpdateEntity(Entity &entity) {
     auto rigidBodyComponent = entity.GetComponent<RigidbodyComponent>(RigidbodyComponentType);
     auto tranform = entity.GetComponent<TransformComponent>(TransformComponentType);
 
-    if (rigidBodyComponent != nullptr) {
+    if (rigidBodyComponent != nullptr &&
+        rigidBodyComponent->GetRigidBody()->getType() == reactphysics3d::BodyType::DYNAMIC) {
         auto factor = accumulator / TimeStep;
 
         auto prevTransform = MatToReactTransform(tranform->WorldMatrix());
-        auto currTransform = rigidBodyComponent->GetTransform();
+        auto currTransform = rigidBodyComponent->GetRigidBody()->getTransform();
 
         auto interpolatedTransform = reactphysics3d::Transform::interpolateTransforms(prevTransform, currTransform,
                                                                                       factor);
 
-
         auto interpolatedMatrix = ReactTransformToMat(interpolatedTransform);
 
-        std::cout << prevTransform.to_string() << std::endl;
         tranform->SetMatrix(interpolatedMatrix, false);
     }
 

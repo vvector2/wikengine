@@ -16,13 +16,17 @@ public:
 
     void Setup() override;
 
+    void SetCameraEntity(Entity *entity);
+
     ~Player() override;
 
 private:
-    CameraFirstPerson *cameraFirstPerson;
     float lastY;
     float lastX;
     bool firstMouse;
+
+    Entity *cameraEntity;
+    CameraFirstPerson *cameraFirstPerson;
 };
 
 

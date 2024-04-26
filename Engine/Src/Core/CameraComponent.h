@@ -18,6 +18,9 @@ public:
     CameraComponent(float left, float right, float up, float down, float near, float far);
 
     inline glm::mat4 Projection() { return projection; };
+
+    glm::mat4 View();
+
 private:
     glm::mat4 projection;
 };

@@ -8,6 +8,7 @@ int main(void) {
     //player
     Entity player;
 
+    //camera
     Entity entityCamera;
     CameraComponent cameraComponent(glm::radians(45.f), 4.0f / 3.0f, 0.1f, 100000.0f);
     TransformComponent transformComponentCamera;
@@ -15,14 +16,19 @@ int main(void) {
     entityCamera.AddUpdateComponent(transformComponentCamera);
 
 
+    //rigidBody
     RigidbodyComponent rigidBodyComponent;
-    rigidBodyComponent.SetBodyType(reactphysics3d::BodyType::DYNAMIC);
+    rigidBodyComponent.GetRigidBody()->setType(reactphysics3d::BodyType::DYNAMIC);
     reactphysics3d::CapsuleShape *capsuleShape = Engine::physicsCommon.createCapsuleShape(0.01, 0.02);
-    rigidBodyComponent.AddCollider(capsuleShape);
+    rigidBodyComponent.GetRigidBody()->addCollider(capsuleShape, reactphysics3d::Transform::identity());
+
 
     TransformComponent transformComponentPlayer;
 
+
+    //player script
     Player playerScript;
+    playerScript.SetCameraEntity(&entityCamera);
 
     player.AddUpdateComponent(playerScript);
     player.AddUpdateComponent(transformComponentPlayer);
@@ -30,7 +36,8 @@ int main(void) {
 
     player.AddChild(entityCamera);
 
-    transformComponentPlayer.SetMatrix(glm::translate(transformComponentPlayer.Matrix(), glm::vec3(0, 2, 0)));
+
+    transformComponentPlayer.SetMatrix(glm::translate(transformComponentPlayer.Matrix(), glm::vec3(0, 1, 0)));
 
     //light
     Entity lightEntity;
@@ -57,6 +64,7 @@ int main(void) {
     scene.AddToScene(lightEntity);
     scene.AddToScene(*debugCollider);
     scene.AddToScene(*map);
+
     scene.SetActiveCamera(entityCamera);
 
     engine.Run(scene);

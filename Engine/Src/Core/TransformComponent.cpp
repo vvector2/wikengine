@@ -16,7 +16,7 @@ void TransformComponent::SetMatrix(glm::mat4 _mat, bool updateRigidBody) {
     if (updateRigidBody) {
         auto rigidBody = _entity->GetComponent<RigidbodyComponent>(RigidbodyComponentType);
         if (rigidBody != nullptr)
-            rigidBody->SetTransform(MatToReactTransform(WorldMatrix()));
+            rigidBody->GetRigidBody()->setTransform(MatToReactTransform(WorldMatrix()));
     }
 }
 

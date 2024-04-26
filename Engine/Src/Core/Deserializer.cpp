@@ -140,8 +140,8 @@ Entity *DeserializerObj::ProcessShape(const tinyobj::shape_t &shape) {
                                                                                                       scaling);
 
 
-    rigidBody->AddCollider(concaveMeshShape);
-    rigidBody->SetBodyType(reactphysics3d::BodyType::STATIC);
+    rigidBody->GetRigidBody()->addCollider(concaveMeshShape, reactphysics3d::Transform::identity());
+    rigidBody->GetRigidBody()->setType(reactphysics3d::BodyType::STATIC);
 
     entity->AddUpdateComponent(*trans);
     entity->AddUpdateComponent(*mesh);

@@ -6,6 +6,7 @@
 #include "../TransformComponent.h"
 #include "../InputManager.h"
 #include "../Common.h"
+#include "../CameraComponent.h"
 
 void Player::Update(float deltaTime) {
 
@@ -24,6 +25,7 @@ void Player::Update(float deltaTime) {
         dirArrow.x = 1;
 
     cameraFirstPerson->ProcessKeyboardArrow(dirArrow, deltaTime);
+
 //    if (firstMouse) {
 //        lastX = InputManager::MouseX();
 //        lastY = InputManager::MouseY();
@@ -38,17 +40,22 @@ void Player::Update(float deltaTime) {
 //
 //    cameraFirstPerson->ProcessMouseMovement(xoffset, yoffset);
 
-    auto tranform = _entity->GetComponent<TransformComponent>(TransformComponentType);
-    //tranform->SetMatrix(cameraFirstPerson->GetViewMatrix());
+
+    auto transform = cameraEntity->GetComponent<TransformComponent>(TransformComponentType);
+    transform->SetMatrix(cameraFirstPerson->GetViewMatrix());
 }
 
 void Player::Setup() {
-    auto transform = _entity->GetComponent<TransformComponent>(TransformComponentType);
-    auto mat = transform->WorldMatrix();
+    auto transform = cameraEntity->GetComponent<TransformComponent>(TransformComponentType);
+    auto mat = transform->Matrix();
     auto baseY = glm::vec3(mat[0][1], mat[1][1], mat[2][1]);
     cameraFirstPerson = new CameraFirstPerson(glm::vec3(mat[3]), baseY);
 }
 
 Player::~Player() {
     delete cameraFirstPerson;
+}
+
+void Player::SetCameraEntity(Entity *entity) {
+    cameraEntity = entity;
 }
