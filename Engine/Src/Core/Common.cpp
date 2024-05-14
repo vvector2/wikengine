@@ -103,7 +103,14 @@ glm::mat4 ReactTransformToMat(reactphysics3d::Transform transform) {
 }
 
 reactphysics3d::Transform MatToReactTransform(glm::mat4 mat) {
+    auto pos = mat[3];
+    auto quat = normalize(glm::quat_cast(mat));
     auto transform = reactphysics3d::Transform();
-    transform.setFromOpenGL(&mat[0][0]);
+    transform.setOrientation(reactphysics3d::Quaternion(quat.x, quat.y, quat.z, quat.w));
+    transform.setPosition(reactphysics3d::Vector3(pos.x, pos.y, pos.z));
     return transform;
+}
+
+reactphysics3d::Vector3 ToReactVec3(glm::vec3 v) {
+    return {v.x, v.y, v.z};
 }

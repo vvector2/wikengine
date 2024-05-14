@@ -70,7 +70,8 @@ void CameraFirstPersonScriptComponent::Update(float deltaTime) {
     cameraFirstPerson->ProcessMouseMovement(xoffset, yoffset);
 
     auto tranform = _entity->GetComponent<TransformComponent>(TransformComponentType);
-    tranform->SetMatrix(cameraFirstPerson->GetViewMatrix());
+    auto viewMatrix = cameraFirstPerson->GetViewMatrix();
+    tranform->SetMatrix(glm::mat4(viewMatrix[0], viewMatrix[1], viewMatrix[2], -viewMatrix[3]));
 
     ImGuiDebugHelper::renderDebugData.activeCamePosition = glm::vec3(cameraFirstPerson->Pos().x,
                                                                      cameraFirstPerson->Pos().y,

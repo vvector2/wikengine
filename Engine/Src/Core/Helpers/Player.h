@@ -9,6 +9,8 @@
 #include "../ScriptComponent.h"
 #include "../CameraFirstPerson.h"
 
+const float PLAYER_MOVEMENT_SPEED = 50;
+
 class Player : public ScriptComponent {
 public:
 

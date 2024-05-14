@@ -4,6 +4,8 @@
 #include "BasicCube.h"
 #include "../MeshComponent.h"
 #include "../LambertMaterial.h"
+#include "../Engine.h"
+#include "../RigidbodyComponent.h"
 
 
 std::vector<GLfloat> vertexCube = {
@@ -249,6 +251,14 @@ Entity *CreateBasicCube() {
 
     auto entity = new Entity();
     auto cubeScript = new CubeScript();
+
+    auto rigidbodyComponent = new RigidbodyComponent();
+    rigidbodyComponent->GetRigidBody()->addCollider(
+            Engine::physicsCommon.createBoxShape(reactphysics3d::Vector3(1, 1, 1)),
+            reactphysics3d::Transform::identity());
+
+
+    entity->AddUpdateComponent(*rigidbodyComponent);
     entity->AddUpdateComponent(*transformComponent);
     entity->AddUpdateComponent(*mesh);
     entity->AddUpdateComponent(*lambertMaterial);

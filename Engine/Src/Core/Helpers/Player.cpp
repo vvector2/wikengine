@@ -7,24 +7,49 @@
 #include "../InputManager.h"
 #include "../Common.h"
 #include "../CameraComponent.h"
+#include "../RigidbodyComponent.h"
 
 void Player::Update(float deltaTime) {
+    auto rigidBody = _entity->GetComponent<RigidbodyComponent>(RigidbodyComponentType);
+    auto transform = cameraEntity->GetComponent<TransformComponent>(TransformComponentType);
+    auto playerMatrix = transform->WorldMatrix();
 
-    auto dirArrow = glm::vec2(0, 0);
+    auto dir = glm::vec2(0, 0);
 
-    if (InputManager::KeyState(GLFW_KEY_UP) != GLFW_RELEASE)
-        dirArrow.y = 1;
+    if (InputManager::KeyState(GLFW_KEY_I) != GLFW_RELEASE)
+        dir.y = 1;
 
-    if (InputManager::KeyState(GLFW_KEY_DOWN) != GLFW_RELEASE)
-        dirArrow.y = -1;
+    if (InputManager::KeyState(GLFW_KEY_K) != GLFW_RELEASE)
+        dir.y = -1;
 
-    if (InputManager::KeyState(GLFW_KEY_LEFT) != GLFW_RELEASE)
-        dirArrow.x = -1;
+    if (InputManager::KeyState(GLFW_KEY_J) != GLFW_RELEASE)
+        dir.x = -1;
 
-    if (InputManager::KeyState(GLFW_KEY_RIGHT) != GLFW_RELEASE)
-        dirArrow.x = 1;
+    if (InputManager::KeyState(GLFW_KEY_L) != GLFW_RELEASE)
+        dir.x = 1;
 
-    cameraFirstPerson->ProcessKeyboardArrow(dirArrow, deltaTime);
+    auto zBase = glm::vec3(0, 0, 1);
+    auto xBase = glm::vec3(1, 0, 0);
+    auto force = glm::vec3((xBase * dir.x + zBase * dir.y) * PLAYER_MOVEMENT_SPEED * deltaTime);
+
+
+    rigidBody->GetRigidBody()->applyLocalForceAtCenterOfMass({force.x, force.y, force.z});
+//
+//    auto dirArrow = glm::vec2(0, 0);
+//
+//    if (InputManager::KeyState(GLFW_KEY_UP) != GLFW_RELEASE)
+//        dirArrow.y = 1;
+//
+//    if (InputManager::KeyState(GLFW_KEY_DOWN) != GLFW_RELEASE)
+//        dirArrow.y = -1;
+//
+//    if (InputManager::KeyState(GLFW_KEY_LEFT) != GLFW_RELEASE)
+//        dirArrow.x = -1;
+//
+//    if (InputManager::KeyState(GLFW_KEY_RIGHT) != GLFW_RELEASE)
+//        dirArrow.x = 1;
+//
+//    cameraFirstPerson->ProcessKeyboardArrow(dirArrow, deltaTime);
 
 //    if (firstMouse) {
 //        lastX = InputManager::MouseX();
@@ -40,9 +65,7 @@ void Player::Update(float deltaTime) {
 //
 //    cameraFirstPerson->ProcessMouseMovement(xoffset, yoffset);
 
-
-    auto transform = cameraEntity->GetComponent<TransformComponent>(TransformComponentType);
-    transform->SetMatrix(cameraFirstPerson->GetViewMatrix());
+    //transform->SetMatrix(cameraFirstPerson->GetViewMatrix());
 }
 
 void Player::Setup() {

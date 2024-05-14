@@ -11,7 +11,6 @@
 #include <algorithm>
 #include "../../../external/sole/sole.hpp"
 #include <glm/glm.hpp>
-#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <reactphysics3d/reactphysics3d.h>
 
@@ -49,6 +48,13 @@ void printMat(glm::mat4 mat);
 glm::mat4 ReactTransformToMat(reactphysics3d::Transform transform);
 
 reactphysics3d::Transform MatToReactTransform(glm::mat4 mat);
+
+reactphysics3d::Vector3 ToReactVec3(glm::vec3 v);
+
+template<typename T>
+T Max(T a, T b) {
+    return a > b ? a : b;
+}
 
 #endif //WIKENGINE_COMMON_H
 

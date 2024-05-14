@@ -7,6 +7,7 @@
 
 #include <reactphysics3d/reactphysics3d.h>
 #include "IComponent.h"
+#include "glm/detail/type_mat.hpp"
 
 class RigidbodyComponent : public IComponent {
 public:
@@ -17,6 +18,8 @@ public:
     ~RigidbodyComponent() override;
 
     reactphysics3d::RigidBody *GetRigidBody() { return rigidBody; }
+
+    void Tranform(glm::mat4 mat);
 
 private:
     reactphysics3d::RigidBody *rigidBody;

@@ -1,43 +1,43 @@
 #include "Engine/Include/EngineCore.h"
-#include "Engine/Src/Core/Helpers/Player.h"
 
 int main(void) {
     Engine engine(1280, 1024);
     engine.Setup();
 
-    //player
-    Entity player;
-
     //camera
     Entity entityCamera;
     CameraComponent cameraComponent(glm::radians(45.f), 4.0f / 3.0f, 0.1f, 100000.0f);
     TransformComponent transformComponentCamera;
+    CameraFirstPersonScriptComponent cameraFirstPersonScriptComponent;
     entityCamera.AddUpdateComponent(cameraComponent);
     entityCamera.AddUpdateComponent(transformComponentCamera);
+    entityCamera.AddUpdateComponent(cameraFirstPersonScriptComponent);
 
+    //player
+    Entity player;
 
-    //rigidBody
+    Entity entityCameraPlayer;
+    CameraComponent cameraComponentPlayer(glm::radians(45.f), 4.0f / 3.0f, 0.1f, 100000.0f);
+    TransformComponent transformComponentCameraPlayer;
+    entityCameraPlayer.AddUpdateComponent(cameraComponentPlayer);
+    entityCameraPlayer.AddUpdateComponent(transformComponentCameraPlayer);
+
     RigidbodyComponent rigidBodyComponent;
     rigidBodyComponent.GetRigidBody()->setType(reactphysics3d::BodyType::DYNAMIC);
-    reactphysics3d::CapsuleShape *capsuleShape = Engine::physicsCommon.createCapsuleShape(0.01, 0.02);
+    auto *capsuleShape = Engine::physicsCommon.createCapsuleShape(0.01, 0.02);
     rigidBodyComponent.GetRigidBody()->addCollider(capsuleShape, reactphysics3d::Transform::identity());
-
 
     TransformComponent transformComponentPlayer;
 
-
-    //player script
     Player playerScript;
-    playerScript.SetCameraEntity(&entityCamera);
+    playerScript.SetCameraEntity(&entityCameraPlayer);
 
     player.AddUpdateComponent(playerScript);
     player.AddUpdateComponent(transformComponentPlayer);
     player.AddUpdateComponent(rigidBodyComponent);
 
     player.AddChild(entityCamera);
-
-
-    transformComponentPlayer.SetMatrix(glm::translate(transformComponentPlayer.Matrix(), glm::vec3(0, 1, 0)));
+    transformComponentPlayer.SetMatrix(glm::translate(transformComponentPlayer.Matrix(), glm::vec3(0, 2, 0.5)));
 
     //light
     Entity lightEntity;
@@ -54,16 +54,29 @@ int main(void) {
     auto debugCollider = DebugCollider::Create();
 
     // map
-    DeserializerObj deserializerObj;
-    deserializerObj.LoadFile("/home/wiktor/CLionProjects/wikengine/example/obj/css_assault/csAssult.obj");
-    auto map = deserializerObj.CreateEntity(true, true, true);
+//    DeserializerObj deserializerObj;
+//    deserializerObj.LoadFile("/home/wiktor/CLionProjects/wikengine/example/obj/css_assault/csAssult.obj");
+//    auto map = deserializerObj.CreateEntity(true, true, true);
+
+    // surface
+    auto surfaceEntity = CreateBasicCube();
+    auto surfaceTransform = surfaceEntity->GetComponent<TransformComponent>(TransformComponentType);
+    auto surfaceRigidBody = surfaceEntity->GetComponent<RigidbodyComponent>(RigidbodyComponentType);
+    auto surfaceMatrix = surfaceTransform->Matrix();
+
+    surfaceRigidBody->GetRigidBody()->setType(reactphysics3d::BodyType::STATIC);
+    surfaceTransform->SetMatrix(
+            glm::scale(glm::translate(surfaceMatrix, glm::vec3(0, -1.0f, 0)), glm::vec3(10, 0.1, 10)));
+
 
     // scene
     Scene scene;
-    scene.AddToScene(player);
     scene.AddToScene(lightEntity);
     scene.AddToScene(*debugCollider);
-    scene.AddToScene(*map);
+    scene.AddToScene(*surfaceEntity);
+    scene.AddToScene(entityCamera);
+    scene.AddToScene(player);
+    //scene.AddToScene(*map);
 
     scene.SetActiveCamera(entityCamera);
 

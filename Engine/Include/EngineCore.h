@@ -1,14 +1,16 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include "../Src/Core/Common.h"
 #include "../Src/Core/Engine.h"
 #include "../Src/Core/TransformComponent.h"
 #include "../Src/Core/CameraComponent.h"
 #include "../Src/Core/MeshComponent.h"
-#include "../Src/Core/Common.h"
 #include "../Src/Core/Entity.h"
 #include "../Src/Core/ScriptComponent.h"
 #include "../Src/Core/CameraFirstPersonScriptComponent.h"
 #include "../Src/Core/Deserializer.h"
 #include "../Src/Core/RigidbodyComponent.h"
 #include "../Src/Core/Helpers/DebugCollider.h"
+#include "../Src/Core/Helpers/BasicCube.h"
+#include "../Src/Core/Helpers/Player.h"
