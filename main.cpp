@@ -37,7 +37,8 @@ int main(void) {
     player.AddUpdateComponent(rigidBodyComponent);
 
     player.AddChild(entityCamera);
-    transformComponentPlayer.SetMatrix(glm::translate(transformComponentPlayer.Matrix(), glm::vec3(0, 2, 0.5)));
+
+    transformComponentPlayer.SetMatrix(glm::translate(transformComponentPlayer.Matrix(), glm::vec3(0, 2, -0.5)));
 
     //light
     Entity lightEntity;
@@ -54,29 +55,30 @@ int main(void) {
     auto debugCollider = DebugCollider::Create();
 
     // map
-//    DeserializerObj deserializerObj;
-//    deserializerObj.LoadFile("/home/wiktor/CLionProjects/wikengine/example/obj/css_assault/csAssult.obj");
-//    auto map = deserializerObj.CreateEntity(true, true, true);
+    DeserializerObj deserializerObj;
+    deserializerObj.LoadFile("/home/wiktor/CLionProjects/wikengine/example/obj/css_assault/csAssult.obj");
+    deserializerObj.LoadCollider("/home/wiktor/CLionProjects/wikengine/example/obj/css_assault/colliders.obj");
+    auto map = deserializerObj.CreateEntity(false);
 
     // surface
-    auto surfaceEntity = CreateBasicCube();
-    auto surfaceTransform = surfaceEntity->GetComponent<TransformComponent>(TransformComponentType);
-    auto surfaceRigidBody = surfaceEntity->GetComponent<RigidbodyComponent>(RigidbodyComponentType);
-    auto surfaceMatrix = surfaceTransform->Matrix();
-
-    surfaceRigidBody->GetRigidBody()->setType(reactphysics3d::BodyType::STATIC);
-    surfaceTransform->SetMatrix(
-            glm::scale(glm::translate(surfaceMatrix, glm::vec3(0, -1.0f, 0)), glm::vec3(10, 0.1, 10)));
+//    auto surfaceEntity = CreateBasicCube();
+//    auto surfaceTransform = surfaceEntity->GetComponent<TransformComponent>(TransformComponentType);
+//    auto surfaceRigidBody = surfaceEntity->GetComponent<RigidbodyComponent>(RigidbodyComponentType);
+//    auto surfaceMatrix = surfaceTransform->Matrix();
+//
+//    surfaceRigidBody->GetRigidBody()->setType(reactphysics3d::BodyType::STATIC);
+//    surfaceTransform->SetMatrix(
+//            glm::scale(glm::translate(surfaceMatrix, glm::vec3(0, -1.0f, 0)), glm::vec3(10, 0.1, 10)));
 
 
     // scene
     Scene scene;
     scene.AddToScene(lightEntity);
     scene.AddToScene(*debugCollider);
-    scene.AddToScene(*surfaceEntity);
+    //scene.AddToScene(*surfaceEntity);
     scene.AddToScene(entityCamera);
     scene.AddToScene(player);
-    //scene.AddToScene(*map);
+    scene.AddToScene(*map);
 
     scene.SetActiveCamera(entityCamera);
 
