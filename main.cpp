@@ -36,7 +36,7 @@ int main(void) {
     player.AddUpdateComponent(transformComponentPlayer);
     player.AddUpdateComponent(rigidBodyComponent);
 
-    player.AddChild(entityCamera);
+    player.AddChild(entityCameraPlayer);
 
     transformComponentPlayer.SetMatrix(glm::translate(transformComponentPlayer.Matrix(), glm::vec3(0, 2, -0.5)));
 
@@ -76,11 +76,11 @@ int main(void) {
     scene.AddToScene(lightEntity);
     scene.AddToScene(*debugCollider);
     //scene.AddToScene(*surfaceEntity);
-    scene.AddToScene(entityCamera);
+    //scene.AddToScene(entityCamera);
     scene.AddToScene(player);
     scene.AddToScene(*map);
 
-    scene.SetActiveCamera(entityCamera);
+    scene.SetActiveCamera(entityCameraPlayer);
 
     engine.Run(scene);
 

@@ -9,7 +9,7 @@
 #include "../ScriptComponent.h"
 #include "../CameraFirstPerson.h"
 
-const float PLAYER_MOVEMENT_SPEED = 50;
+const float PLAYER_MOVEMENT_SPEED = 10;
 
 class Player : public ScriptComponent {
 public:
@@ -29,6 +29,11 @@ private:
 
     Entity *cameraEntity;
     CameraFirstPerson *cameraFirstPerson;
+
+    void HandleMovement(float deltaTime);
+
+    void HandleCamera(float deltaTime);
+
 };
 
 

@@ -5,11 +5,42 @@
 #include "Player.h"
 #include "../TransformComponent.h"
 #include "../InputManager.h"
-#include "../Common.h"
 #include "../CameraComponent.h"
 #include "../RigidbodyComponent.h"
 
 void Player::Update(float deltaTime) {
+    auto transform = cameraEntity->GetComponent<TransformComponent>(TransformComponentType);
+
+    HandleMovement(deltaTime);
+
+    HandleCamera(deltaTime);
+
+    auto viewMatrix = cameraFirstPerson->GetViewMatrix();
+    transform->SetMatrix(glm::mat4(viewMatrix[0], viewMatrix[1], viewMatrix[2], -viewMatrix[3]));
+}
+
+void Player::Setup() {
+    auto transform = cameraEntity->GetComponent<TransformComponent>(TransformComponentType);
+    auto mat = transform->Matrix();
+    auto baseY = glm::vec3(mat[0][1], mat[1][1], mat[2][1]);
+    cameraFirstPerson = new CameraFirstPerson(glm::vec3(mat[3]), baseY);
+
+    auto rigidBodyComponent = _entity->GetComponent<RigidbodyComponent>(RigidbodyComponentType);
+
+    rigidBodyComponent->GetRigidBody()->setAngularLockAxisFactor({0, 1, 0});
+    rigidBodyComponent->GetRigidBody()->getCollider(0)->getMaterial().setBounciness(0);
+    rigidBodyComponent->GetRigidBody()->getCollider(0)->getMaterial().setFrictionCoefficient(0.7);
+}
+
+Player::~Player() {
+    delete cameraFirstPerson;
+}
+
+void Player::SetCameraEntity(Entity *entity) {
+    cameraEntity = entity;
+}
+
+void Player::HandleMovement(float deltaTime) {
     auto rigidBody = _entity->GetComponent<RigidbodyComponent>(RigidbodyComponentType);
     auto transform = cameraEntity->GetComponent<TransformComponent>(TransformComponentType);
     auto playerMatrix = transform->WorldMatrix();
@@ -28,57 +59,59 @@ void Player::Update(float deltaTime) {
     if (InputManager::KeyState(GLFW_KEY_L) != GLFW_RELEASE)
         dir.x = 1;
 
-    auto zBase = glm::vec3(0, 0, 1);
-    auto xBase = glm::vec3(1, 0, 0);
-    auto force = glm::vec3((xBase * dir.x + zBase * dir.y) * PLAYER_MOVEMENT_SPEED * deltaTime);
+    auto front = glm::vec3(playerMatrix[2]);
+    auto xBase = glm::vec3(playerMatrix[0]);
 
+    auto zAxisFront = -glm::normalize(glm::dot(glm::vec3(0, 0, 1), front)) * PLAYER_MOVEMENT_SPEED * deltaTime * dir.y;
+    auto xAxisFront = glm::normalize(glm::dot(glm::vec3(1, 0, 0), front)) * PLAYER_MOVEMENT_SPEED * deltaTime * dir.y;
 
+    auto zAxisxBase = -glm::normalize(glm::dot(glm::vec3(0, 0, 1), xBase)) * PLAYER_MOVEMENT_SPEED * deltaTime * dir.x;
+    auto xAxisxBase = glm::normalize(glm::dot(glm::vec3(1, 0, 0), xBase)) * PLAYER_MOVEMENT_SPEED * deltaTime * dir.x;
+
+    auto force = glm::vec3(xAxisFront + xAxisxBase, 0, zAxisFront + zAxisxBase);
     rigidBody->GetRigidBody()->applyLocalForceAtCenterOfMass({force.x, force.y, force.z});
-//
-//    auto dirArrow = glm::vec2(0, 0);
-//
-//    if (InputManager::KeyState(GLFW_KEY_UP) != GLFW_RELEASE)
-//        dirArrow.y = 1;
-//
-//    if (InputManager::KeyState(GLFW_KEY_DOWN) != GLFW_RELEASE)
-//        dirArrow.y = -1;
-//
-//    if (InputManager::KeyState(GLFW_KEY_LEFT) != GLFW_RELEASE)
-//        dirArrow.x = -1;
-//
-//    if (InputManager::KeyState(GLFW_KEY_RIGHT) != GLFW_RELEASE)
-//        dirArrow.x = 1;
-//
-//    cameraFirstPerson->ProcessKeyboardArrow(dirArrow, deltaTime);
 
-//    if (firstMouse) {
-//        lastX = InputManager::MouseX();
-//        lastY = InputManager::MouseY();
-//        firstMouse = false;
-//    }
-//
-//    float xoffset = InputManager::MouseX() - lastX;
-//    float yoffset = lastY - InputManager::MouseY();
-//
-//    lastX = InputManager::MouseX();
-//    lastY = InputManager::MouseY();
-//
-//    cameraFirstPerson->ProcessMouseMovement(xoffset, yoffset);
+    auto velocity = rigidBody->GetRigidBody()->getLinearVelocity();
+    auto velocityV = glm::vec3(velocity.x, velocity.y, velocity.z);
 
-    //transform->SetMatrix(cameraFirstPerson->GetViewMatrix());
+    auto velocityScalar = glm::length(velocityV);
+
+    if (PLAYER_MOVEMENT_SPEED < velocityScalar) {
+        auto adjustedVelocity = glm::normalize(velocityV) * PLAYER_MOVEMENT_SPEED;
+        adjustedVelocity.y = velocityV.y;
+        rigidBody->GetRigidBody()->setLinearVelocity({adjustedVelocity.x, adjustedVelocity.y, adjustedVelocity.z});
+    }
+
 }
 
-void Player::Setup() {
-    auto transform = cameraEntity->GetComponent<TransformComponent>(TransformComponentType);
-    auto mat = transform->Matrix();
-    auto baseY = glm::vec3(mat[0][1], mat[1][1], mat[2][1]);
-    cameraFirstPerson = new CameraFirstPerson(glm::vec3(mat[3]), baseY);
-}
+void Player::HandleCamera(float deltaTime) {
+    auto dirArrow = glm::vec2(0, 0);
 
-Player::~Player() {
-    delete cameraFirstPerson;
-}
+    if (InputManager::KeyState(GLFW_KEY_UP) != GLFW_RELEASE)
+        dirArrow.y = 1;
 
-void Player::SetCameraEntity(Entity *entity) {
-    cameraEntity = entity;
+    if (InputManager::KeyState(GLFW_KEY_DOWN) != GLFW_RELEASE)
+        dirArrow.y = -1;
+
+    if (InputManager::KeyState(GLFW_KEY_LEFT) != GLFW_RELEASE)
+        dirArrow.x = -1;
+
+    if (InputManager::KeyState(GLFW_KEY_RIGHT) != GLFW_RELEASE)
+        dirArrow.x = 1;
+
+    cameraFirstPerson->ProcessKeyboardArrow(dirArrow, deltaTime);
+
+    if (firstMouse) {
+        lastX = InputManager::MouseX();
+        lastY = InputManager::MouseY();
+        firstMouse = false;
+    }
+
+    float xoffset = InputManager::MouseX() - lastX;
+    float yoffset = lastY - InputManager::MouseY();
+
+    lastX = InputManager::MouseX();
+    lastY = InputManager::MouseY();
+
+    cameraFirstPerson->ProcessMouseMovement(xoffset, yoffset);
 }

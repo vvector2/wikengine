@@ -45,7 +45,7 @@ void Engine::Setup() {
     imGuiDebugHelper = new ImGuiDebugHelper(window);
 
     reactphysics3d::PhysicsWorld::WorldSettings settings;
-    settings.gravity = reactphysics3d::Vector3(0, -0.05, 0);
+    settings.gravity = reactphysics3d::Vector3(0, -0.1, 0);
     physicsWorld = Engine::physicsCommon.createPhysicsWorld(settings);
     physicsWorld->setIsDebugRenderingEnabled(true);
     Engine::debugRenderer = &physicsWorld->getDebugRenderer();

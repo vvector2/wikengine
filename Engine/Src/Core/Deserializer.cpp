@@ -185,6 +185,9 @@ RigidbodyComponent *DeserializerObj::GetCollider() {
 
 
     rigidBody->GetRigidBody()->setType(reactphysics3d::BodyType::STATIC);
+    
+    for (auto i = 0; i < rigidBody->GetRigidBody()->getNbColliders(); i++)
+        rigidBody->GetRigidBody()->getCollider(i)->getMaterial().setBounciness(0);
 
     return rigidBody;
 
