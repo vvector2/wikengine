@@ -29,7 +29,7 @@ void Player::Setup() {
 
     rigidBodyComponent->GetRigidBody()->setAngularLockAxisFactor({0, 1, 0});
     rigidBodyComponent->GetRigidBody()->getCollider(0)->getMaterial().setBounciness(0);
-    rigidBodyComponent->GetRigidBody()->getCollider(0)->getMaterial().setFrictionCoefficient(0.7);
+    //irigidBodyComponent->GetRigidBody()->getCollider(0)->getMaterial().setFrictionCoefficient(20);
 }
 
 Player::~Player() {
@@ -59,25 +59,23 @@ void Player::HandleMovement(float deltaTime) {
     if (InputManager::KeyState(GLFW_KEY_L) != GLFW_RELEASE)
         dir.x = 1;
 
-    auto front = glm::vec3(playerMatrix[2]);
-    auto xBase = glm::vec3(playerMatrix[0]);
+    auto front = glm::normalize(glm::vec3(playerMatrix[2]));
+    auto xBase = glm::normalize(glm::vec3(playerMatrix[0]));
 
-    auto zAxisFront = -glm::normalize(glm::dot(glm::vec3(0, 0, 1), front)) * PLAYER_MOVEMENT_SPEED * deltaTime * dir.y;
-    auto xAxisFront = glm::normalize(glm::dot(glm::vec3(1, 0, 0), front)) * PLAYER_MOVEMENT_SPEED * deltaTime * dir.y;
+    auto force = (front * dir.y + xBase * dir.x) * PLAYER_MOVEMENT_SPEED_FORCE * deltaTime;
 
-    auto zAxisxBase = -glm::normalize(glm::dot(glm::vec3(0, 0, 1), xBase)) * PLAYER_MOVEMENT_SPEED * deltaTime * dir.x;
-    auto xAxisxBase = glm::normalize(glm::dot(glm::vec3(1, 0, 0), xBase)) * PLAYER_MOVEMENT_SPEED * deltaTime * dir.x;
-
-    auto force = glm::vec3(xAxisFront + xAxisxBase, 0, zAxisFront + zAxisxBase);
-    rigidBody->GetRigidBody()->applyLocalForceAtCenterOfMass({force.x, force.y, force.z});
+    rigidBody->GetRigidBody()->applyLocalForceAtCenterOfMass({force.x, 0, force.z});
 
     auto velocity = rigidBody->GetRigidBody()->getLinearVelocity();
     auto velocityV = glm::vec3(velocity.x, velocity.y, velocity.z);
 
-    auto velocityScalar = glm::length(velocityV);
+    auto velocityV2D = glm::vec3(velocity.x, 0, velocity.z);
+    auto velocityScalar = glm::length(velocityV2D);
 
-    if (PLAYER_MOVEMENT_SPEED < velocityScalar) {
-        auto adjustedVelocity = glm::normalize(velocityV) * PLAYER_MOVEMENT_SPEED;
+    std::cout << "speed: " << velocityScalar << std::endl;
+    if (MAX_SPEED < velocityScalar) {
+        std::cout << "max speed reacted" << std::endl;
+        auto adjustedVelocity = glm::normalize(velocityV) * MAX_SPEED;
         adjustedVelocity.y = velocityV.y;
         rigidBody->GetRigidBody()->setLinearVelocity({adjustedVelocity.x, adjustedVelocity.y, adjustedVelocity.z});
     }
