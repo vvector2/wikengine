@@ -56,8 +56,8 @@ int main(void) {
 
     // map
     DeserializerObj deserializerObj;
-    deserializerObj.LoadFile("/home/wiktor/CLionProjects/wikengine/example/obj/css_assault/csAssult.obj");
-    deserializerObj.LoadCollider("/home/wiktor/CLionProjects/wikengine/example/obj/css_assault/colliders.obj");
+    deserializerObj.LoadFile("/home/wiktor/CLionProjects/wikengine/example/obj/de_dust/de_dust.obj");
+    //deserializerObj.LoadCollider("/home/wiktor/CLionProjects/wikengine/example/obj/css_assault/colliders.obj");
     auto map = deserializerObj.CreateEntity(true);
 
     // surface
@@ -76,11 +76,11 @@ int main(void) {
     scene.AddToScene(lightEntity);
     //scene.AddToScene(*debugCollider);
     //scene.AddToScene(*surfaceEntity);
-    //scene.AddToScene(entityCamera);
-    scene.AddToScene(player);
+    scene.AddToScene(entityCamera);
+    //scene.AddToScene(player);
     scene.AddToScene(*map);
 
-    scene.SetActiveCamera(entityCameraPlayer);
+    scene.SetActiveCamera(entityCamera);
 
     engine.Run(scene);
 
