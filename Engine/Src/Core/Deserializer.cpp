@@ -112,7 +112,7 @@ Entity *DeserializerObj::ProcessShape(const tinyobj::shape_t &shape) {
         if (index.normal_index != -1) {
             shapeNormals.push_back(normals[index.normal_index * 3]);
             shapeNormals.push_back(normals[index.normal_index * 3 + 1]);
-            shapeNormals.push_back(normals[index.normal_index * 3 + 1]);
+            shapeNormals.push_back(normals[index.normal_index * 3 + 2]);
         }
 
         shapeColors.push_back(0);
@@ -185,7 +185,7 @@ RigidbodyComponent *DeserializerObj::GetCollider() {
 
 
     rigidBody->GetRigidBody()->setType(reactphysics3d::BodyType::STATIC);
-    
+
     for (auto i = 0; i < rigidBody->GetRigidBody()->getNbColliders(); i++)
         rigidBody->GetRigidBody()->getCollider(i)->getMaterial().setBounciness(0);
 

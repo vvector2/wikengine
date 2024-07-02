@@ -22,7 +22,8 @@ void main() {
     mat4 rotationScaleWorldMatrix = mat4(worldMatrix);
     rotationScaleWorldMatrix[3] = vec4(0, 0, 0, 1);
 
-    visibilityNormal = enableLight && false ? dot(normalize((rotationScaleWorldMatrix * vec4(vertexNormal, 1)).xyz), -normalize(directionalLight)) : 1.0f;
-    visibilityNormal = visibilityNormal < 0.1f ? 0.1f : visibilityNormal;
+    float surfaceReflection = dot(normalize((rotationScaleWorldMatrix * vec4(vertexNormal, 1)).xyz), -normalize(directionalLight));
+
+    visibilityNormal = enableLight ? (surfaceReflection <= 0.4 ? 0.4 : surfaceReflection) : 1.0f;
     uv = vertexUV;
 }

@@ -36,7 +36,7 @@ void Engine::Setup() {
     glfwSetScrollCallback(window, InputManager::scrollCallback);
     glfwSetKeyCallback(window, InputManager::keyCallback);
 
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glEnable(GL_DEPTH_TEST);
 

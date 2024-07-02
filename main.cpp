@@ -24,7 +24,7 @@ int main(void) {
 
     RigidbodyComponent rigidBodyComponent;
     rigidBodyComponent.GetRigidBody()->setType(reactphysics3d::BodyType::DYNAMIC);
-    auto *capsuleShape = Engine::physicsCommon.createCapsuleShape(0.01, 0.1);
+    auto *capsuleShape = Engine::physicsCommon.createCapsuleShape(0.012, 0.036);
     rigidBodyComponent.GetRigidBody()->addCollider(capsuleShape, reactphysics3d::Transform::identity());
 
     TransformComponent transformComponentPlayer;
@@ -38,7 +38,7 @@ int main(void) {
 
     player.AddChild(entityCameraPlayer);
 
-    transformComponentPlayer.SetMatrix(glm::translate(transformComponentPlayer.Matrix(), glm::vec3(0, 2, 0.4)));
+    transformComponentPlayer.SetMatrix(glm::translate(transformComponentPlayer.Matrix(), glm::vec3(0.4, 0.5, -0.3)));
 
     //light
     Entity lightEntity;
@@ -46,9 +46,9 @@ int main(void) {
     auto matLight = transformLight.Matrix();
     lightEntity.AddUpdateComponent(transformLight);
     DirectionaLight light;
-    light.dir.x = 0;
+    light.dir.x = -0.5;
     light.dir.y = -1;
-    light.dir.z = 0;
+    light.dir.z = -0.5;
     lightEntity.AddUpdateComponent(light);
 
     // debug collider
@@ -57,7 +57,7 @@ int main(void) {
     // map
     DeserializerObj deserializerObj;
     deserializerObj.LoadFile("/home/wiktor/CLionProjects/wikengine/example/obj/de_dust/de_dust.obj");
-    //deserializerObj.LoadCollider("/home/wiktor/CLionProjects/wikengine/example/obj/css_assault/colliders.obj");
+    deserializerObj.LoadCollider("/home/wiktor/CLionProjects/wikengine/example/obj/de_dust/collider.obj");
     auto map = deserializerObj.CreateEntity(true);
 
     // surface
@@ -74,13 +74,13 @@ int main(void) {
     // scene
     Scene scene;
     scene.AddToScene(lightEntity);
-    //scene.AddToScene(*debugCollider);
+    scene.AddToScene(*debugCollider);
     //scene.AddToScene(*surfaceEntity);
-    scene.AddToScene(entityCamera);
-    //scene.AddToScene(player);
+    //scene.AddToScene(entityCamera);
+    scene.AddToScene(player);
     scene.AddToScene(*map);
 
-    scene.SetActiveCamera(entityCamera);
+    scene.SetActiveCamera(entityCameraPlayer);
 
     engine.Run(scene);
 
