@@ -9,7 +9,7 @@
 #include "../ScriptComponent.h"
 #include "../CameraFirstPerson.h"
 
-const float PLAYER_MOVEMENT_SPEED_FORCE = 10;
+const float PLAYER_MOVEMENT_SPEED_FORCE = 20;
 const float MAX_SPEED = 0.05;
 
 class Player : public ScriptComponent {

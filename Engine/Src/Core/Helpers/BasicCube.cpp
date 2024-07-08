@@ -16,13 +16,13 @@ std::vector<GLfloat> vertexCube = {
 
         //back 2
         -1.f, -1.f, 1.f,
-        -1.f, 1.f, 1.f,
         1.f, -1.f, 1.f,
+        -1.f, 1.f, 1.f,
 
         //front 1
         1.f, 1.f, -1.f,
-        -1.f, 1.f, -1.f,
         1.f, -1.f, -1.f,
+        -1.f, 1.f, -1.f,
 
         //front 2
         -1.f, -1.f, -1.f,
@@ -31,8 +31,8 @@ std::vector<GLfloat> vertexCube = {
 
         //top 1
         1.f, 1.f, 1.f,
-        -1.f, 1.f, 1.f,
         1.f, 1.f, -1.f,
+        -1.f, 1.f, 1.f,
 
         //top 2
         -1.f, 1.f, 1.f,
@@ -46,13 +46,13 @@ std::vector<GLfloat> vertexCube = {
 
         //bottom 2
         -1.f, -1.f, 1.f,
-        1.f, -1.f, -1.f,
         -1.f, -1.f, -1.f,
+        1.f, -1.f, -1.f,
 
         //left 1
         -1.f, -1.f, 1.f,
-        -1.f, -1.f, -1.f,
         -1.f, 1.f, -1.f,
+        -1.f, -1.f, -1.f,
 
         //left 2
         -1.f, 1.f, 1.f,
@@ -66,8 +66,8 @@ std::vector<GLfloat> vertexCube = {
 
         //right 2
         1.f, 1.f, 1.f,
-        1.f, 1.f, -1.f,
         1.f, -1.f, 1.f,
+        1.f, 1.f, -1.f,
 };
 
 
@@ -135,50 +135,62 @@ std::vector<GLfloat> normalCube = {
 
 
 std::vector<GLfloat> colorCube = {
+        //back 1
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
 
+        //back 2
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
 
+        //front 1
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
 
+        //front 2
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
 
+        //top 1
+        1, 0.f, 0.f,
+        0.f, 1.f, 0.f,
+        1.f, 0.f, 0.f,
+
+        // top 2
+        1.f, 0.f, 0.f,
+        0.f, 1.f, 0.f,
+        0.f, 1.f, 0.f,
+
+        //bottom 1
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
 
+        //bottom 2
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
 
+        //left 1
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
 
+        //left 2
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
 
+        //right 1
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
 
-        225.f / 255.f, 0.f, 1.f,
-        225.f / 255.f, 0.f, 1.f,
-        225.f / 255.f, 0.f, 1.f,
-
-        225.f / 255.f, 0.f, 1.f,
-        225.f / 255.f, 0.f, 1.f,
-        225.f / 255.f, 0.f, 1.f,
-
+        //right 2
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,
         225.f / 255.f, 0.f, 1.f,

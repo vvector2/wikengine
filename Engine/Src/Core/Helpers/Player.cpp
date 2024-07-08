@@ -29,7 +29,7 @@ void Player::Setup() {
 
     rigidBodyComponent->GetRigidBody()->setAngularLockAxisFactor({0, 1, 0});
     rigidBodyComponent->GetRigidBody()->getCollider(0)->getMaterial().setBounciness(0);
-    //irigidBodyComponent->GetRigidBody()->getCollider(0)->getMaterial().setFrictionCoefficient(20);
+    rigidBodyComponent->GetRigidBody()->getCollider(0)->getMaterial().setFrictionCoefficient(10);
 }
 
 Player::~Player() {
@@ -60,7 +60,9 @@ void Player::HandleMovement(float deltaTime) {
         dir.x = 1;
 
     auto front = glm::normalize(glm::vec3(playerMatrix[2]));
+    front.z = -front.z;
     auto xBase = glm::normalize(glm::vec3(playerMatrix[0]));
+    xBase.z = -xBase.z;
 
     auto force = (front * dir.y + xBase * dir.x) * PLAYER_MOVEMENT_SPEED_FORCE * deltaTime;
 
